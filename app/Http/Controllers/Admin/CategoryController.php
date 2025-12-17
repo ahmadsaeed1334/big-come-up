@@ -12,6 +12,7 @@ class CategoryController extends Controller
 {
     public function index(Request $request)
     {
+        $title = "Category";
         $query = Category::query()->latest();
 
         if ($request->filled('status')) {
@@ -26,12 +27,13 @@ class CategoryController extends Controller
 
         $categories = $query->paginate(10)->withQueryString();
 
-        return view('admin.categories.index', compact('categories'));
+        return view('admin.categories.index', compact('categories', 'title'));
     }
 
     public function create()
     {
-        return view('admin.categories.create');
+        $title = "Create Category";
+        return view('admin.categories.create', compact('title'));
     }
 
     public function store(Request $request)
@@ -54,7 +56,8 @@ class CategoryController extends Controller
 
     public function edit(Category $category)
     {
-        return view('admin.categories.edit', compact('category'));
+        $title = "Edit Category";
+        return view('admin.categories.edit', compact('category', 'title'));
     }
 
     public function update(Request $request, Category $category)

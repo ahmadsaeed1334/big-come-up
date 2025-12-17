@@ -13,6 +13,7 @@ class VoteController extends Controller
 {
     public function index(Request $request)
     {
+        $title = "Vote";
         $query = Vote::query()
             ->with([
                 'user:id,name,email',
@@ -51,7 +52,7 @@ class VoteController extends Controller
         $entries = Entry::query()->orderBy('id', 'desc')->limit(200)->get(['id', 'title', 'competition_id']);
         $users = User::query()->orderBy('name')->limit(200)->get(['id', 'name', 'email']);
 
-        return view('admin.votes.index', compact('votes', 'competitions', 'entries', 'users'));
+        return view('admin.votes.index', compact('votes', 'competitions', 'entries', 'users', 'title'));
     }
 
     public function destroy(Vote $vote)

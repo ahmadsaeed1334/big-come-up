@@ -135,10 +135,13 @@
 
         {{-- Competitions Module --}}
         <li class="nav-item">
+        <li class="nav-item">
             <a class="nav-link {{ is_active_parent('admin.competitions') }}" data-bs-toggle="collapse"
-                href="#collapseCompetitions" role="button">
+                data-bs-target="#collapseCompetitions" role="button" aria-expanded="false"
+                aria-controls="collapseCompetitions">
                 <i class="bi bi-trophy me-2"></i> Competitions
             </a>
+
             <div class="collapse {{ is_active_prefix('admin.competitions') }}" id="collapseCompetitions">
                 <ul class="nav flex-column mt-1">
                     <li class="nav-item">

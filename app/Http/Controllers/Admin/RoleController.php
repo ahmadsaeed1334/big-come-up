@@ -12,6 +12,7 @@ class RoleController extends Controller
 {
     public function index()
     {
+        $title = "Role";
         $roles = Role::with('permissions')
             ->orderBy('name')
             ->get();
@@ -20,7 +21,7 @@ class RoleController extends Controller
             ->orderBy('name')
             ->get();
 
-        return view('admin.roles.index', compact('roles', 'permissions'));
+        return view('admin.roles.index', compact('roles', 'permissions', 'title'));
     }
 
     public function store(Request $request)

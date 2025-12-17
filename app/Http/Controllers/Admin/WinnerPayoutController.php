@@ -14,6 +14,7 @@ class WinnerPayoutController extends Controller
 {
     public function index(Request $request)
     {
+        $title = "Winner Payout";
         $query = WinnerPayout::query()
             ->with([
                 'competition:id,title,status',
@@ -43,16 +44,18 @@ class WinnerPayoutController extends Controller
         $competitions = Competition::query()->orderBy('title')->get(['id', 'title']);
         $users = User::query()->orderBy('name')->limit(200)->get(['id', 'name', 'email']);
 
-        return view('admin.winner_payouts.index', compact('payouts', 'competitions', 'users'));
+        return view('admin.winner_payouts.index', compact('payouts', 'competitions', 'users', 'title'));
     }
 
     public function create()
     {
+        $title = "Create Winner Payout";
+
         $competitions = Competition::query()->orderBy('title')->get(['id', 'title', 'status']);
         $users = User::query()->orderBy('name')->get(['id', 'name', 'email']);
         $entries = Entry::query()->orderBy('id', 'desc')->limit(300)->get(['id', 'title', 'competition_id']);
 
-        return view('admin.winner_payouts.create', compact('competitions', 'users', 'entries'));
+        return view('admin.winner_payouts.create', compact('competitions', 'users', 'entries', 'title'));
     }
 
     public function store(Request $request)
@@ -75,6 +78,8 @@ class WinnerPayoutController extends Controller
 
     public function edit(WinnerPayout $winner_payout)
     {
+        $title = "Edit Winner Payout";
+
         $winner_payout->load(['competition', 'user', 'entry']);
 
         $competitions = Competition::query()->orderBy('title')->get(['id', 'title', 'status']);
@@ -86,6 +91,7 @@ class WinnerPayoutController extends Controller
             'competitions' => $competitions,
             'users' => $users,
             'entries' => $entries,
+            'title' => $title,
         ]);
     }
 

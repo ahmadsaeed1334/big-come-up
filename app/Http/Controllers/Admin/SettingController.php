@@ -11,8 +11,10 @@ class SettingController extends Controller
 {
     public function edit(SettingsService $settings)
     {
+        $title = "General Setting";
+
         $data = $settings->getAll();
-        return view('admin.settings.edit', compact('data'));
+        return view('admin.settings.edit', compact('data', 'title'));
     }
 
     public function update(Request $request, SettingsService $settings)

@@ -13,6 +13,8 @@ class ReportController extends Controller
 {
     public function index(Request $request)
     {
+        $title = "Report";
+
         $query = Report::query()
             ->with([
                 'reporter:id,name,email',
@@ -46,15 +48,17 @@ class ReportController extends Controller
         $users = User::query()->orderBy('name')->limit(200)->get(['id', 'name', 'email']);
         $entries = Entry::query()->orderBy('id', 'desc')->limit(200)->get(['id', 'title']);
 
-        return view('admin.reports.index', compact('reports', 'users', 'entries'));
+        return view('admin.reports.index', compact('reports', 'users', 'entries', 'title'));
     }
 
     public function create()
     {
+        $title = "Create Report";
+
         $users = User::query()->orderBy('name')->get(['id', 'name', 'email']);
         $entries = Entry::query()->orderBy('id', 'desc')->limit(300)->get(['id', 'title', 'competition_id']);
 
-        return view('admin.reports.create', compact('users', 'entries'));
+        return view('admin.reports.create', compact('users', 'entries', 'title'));
     }
 
     public function store(Request $request)
@@ -77,12 +81,14 @@ class ReportController extends Controller
 
     public function edit(Report $report)
     {
+        $title = "Edit Report";
+
         $report->load(['reporter', 'reportedUser', 'entry']);
 
         $users = User::query()->orderBy('name')->get(['id', 'name', 'email']);
         $entries = Entry::query()->orderBy('id', 'desc')->limit(300)->get(['id', 'title', 'competition_id']);
 
-        return view('admin.reports.edit', compact('report', 'users', 'entries'));
+        return view('admin.reports.edit', compact('report', 'users', 'entries', 'title'));
     }
 
     public function update(Request $request, Report $report)

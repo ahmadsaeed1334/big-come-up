@@ -12,6 +12,7 @@ class AffiliatePayoutController extends Controller
 {
     public function index(Request $request)
     {
+        $title = "Affiliates Payout";
         $query = AffiliatePayout::query()->with('affiliate.user')->latest();
 
         if ($request->filled('status')) {
@@ -25,13 +26,14 @@ class AffiliatePayoutController extends Controller
         $payouts = $query->paginate(10)->withQueryString();
         $affiliates = Affiliate::query()->with('user')->orderByDesc('id')->get();
 
-        return view('admin.affiliate_payouts.index', compact('payouts', 'affiliates'));
+        return view('admin.affiliate_payouts.index', compact('payouts', 'affiliates', 'title'));
     }
 
     public function create()
     {
+        $title = "Create Affiliates Payout";
         $affiliates = Affiliate::query()->with('user')->orderByDesc('id')->get();
-        return view('admin.affiliate_payouts.create', compact('affiliates'));
+        return view('admin.affiliate_payouts.create', compact('affiliates', 'title'));
     }
 
     public function store(Request $request)
@@ -56,10 +58,13 @@ class AffiliatePayoutController extends Controller
 
     public function edit(AffiliatePayout $affiliate_payout)
     {
+        $title = "Edit Affiliates Payout";
         $affiliates = Affiliate::query()->with('user')->orderByDesc('id')->get();
         return view('admin.affiliate_payouts.edit', [
             'payout' => $affiliate_payout,
             'affiliates' => $affiliates,
+            'title' => $title,
+
         ]);
     }
 

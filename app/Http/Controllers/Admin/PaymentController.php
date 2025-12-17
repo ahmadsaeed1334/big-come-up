@@ -15,6 +15,7 @@ class PaymentController extends Controller
 {
     public function index(Request $request)
     {
+        $title = "Payment";
         $query = Payment::query()
             ->with([
                 'order:id,order_number,total,currency,payment_status',
@@ -40,11 +41,12 @@ class PaymentController extends Controller
 
         $payments = $query->paginate(10)->withQueryString();
 
-        return view('admin.payments.index', compact('payments'));
+        return view('admin.payments.index', compact('payments', 'title'));
     }
 
     public function create()
     {
+        $title = "Create Payment";
         $orders = Order::query()
             ->with('user:id,name,email')
             ->latest()
@@ -53,7 +55,7 @@ class PaymentController extends Controller
 
         $users = User::query()->orderBy('name')->limit(200)->get(['id', 'name', 'email']);
 
-        return view('admin.payments.create', compact('orders', 'users'));
+        return view('admin.payments.create', compact('orders', 'users', 'title'));
     }
 
     public function store(Request $request)
@@ -90,6 +92,7 @@ class PaymentController extends Controller
 
     public function edit(Payment $payment)
     {
+        $title = "Edit Payment";
         $payment->load(['order', 'user']);
 
         $orders = Order::query()
@@ -100,7 +103,7 @@ class PaymentController extends Controller
 
         $users = User::query()->orderBy('name')->limit(200)->get(['id', 'name', 'email']);
 
-        return view('admin.payments.edit', compact('payment', 'orders', 'users'));
+        return view('admin.payments.edit', compact('payment', 'orders', 'users', 'title'));
     }
 
     public function update(Request $request, Payment $payment)

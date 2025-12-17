@@ -12,6 +12,7 @@ class CouponController extends Controller
 {
     public function index(Request $request)
     {
+        $title = "Coupon";
         $query = Coupon::query()->latest();
 
         if ($request->filled('status')) {
@@ -32,12 +33,13 @@ class CouponController extends Controller
 
         $coupons = $query->paginate(10)->withQueryString();
 
-        return view('admin.coupons.index', compact('coupons'));
+        return view('admin.coupons.index', compact('coupons', 'title'));
     }
 
     public function create()
     {
-        return view('admin.coupons.create');
+        $title = "Create Coupon";
+        return view('admin.coupons.create', compact('title'));
     }
 
     public function store(Request $request)
@@ -83,7 +85,8 @@ class CouponController extends Controller
 
     public function edit(Coupon $coupon)
     {
-        return view('admin.coupons.edit', compact('coupon'));
+        $title = " Edit Coupon";
+        return view('admin.coupons.edit', compact('coupon', 'title'));
     }
 
     public function update(Request $request, Coupon $coupon)

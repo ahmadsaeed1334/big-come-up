@@ -11,11 +11,12 @@ class PermissionController extends Controller
 {
     public function index()
     {
+        $title = "Permission";
         $permissions = Permission::query()
             ->orderBy('name')
             ->paginate(10);
 
-        return view('admin.permissions.index', compact('permissions'));
+        return view('admin.permissions.index', compact('permissions', 'title'));
     }
 
     public function store(Request $request)

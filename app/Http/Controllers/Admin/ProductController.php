@@ -14,6 +14,7 @@ class ProductController extends Controller
 {
     public function index(Request $request)
     {
+        $title = "Product";
         $query = Product::query()
             ->with('category')
             ->latest();
@@ -33,14 +34,15 @@ class ProductController extends Controller
 
         $products = $query->paginate(10)->withQueryString();
 
-        return view('admin.products.index', compact('products'));
+        return view('admin.products.index', compact('products', 'title'));
     }
 
 
     public function create()
     {
+        $title = "Create Product";
         $categories = Category::query()->where('status', 'active')->orderBy('name')->get();
-        return view('admin.products.create', compact('categories'));
+        return view('admin.products.create', compact('categories', 'title'));
     }
 
 
@@ -77,8 +79,9 @@ class ProductController extends Controller
 
     public function edit(Product $product)
     {
+        $title = "Edit Product";
         $categories = Category::query()->orderBy('name')->get();
-        return view('admin.products.edit', compact('product', 'categories'));
+        return view('admin.products.edit', compact('product', 'categories', 'title'));
     }
 
 

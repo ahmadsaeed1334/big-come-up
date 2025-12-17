@@ -24,6 +24,8 @@ class UserController extends Controller
 
     public function index(Request $request)
     {
+        $title = "User";
+
         $query = User::query()->latest();
 
         if ($request->filled('q')) {
@@ -59,15 +61,16 @@ class UserController extends Controller
 
         $types = $this->userTypes();
 
-        return view('admin.users.index', compact('users', 'roles', 'types'));
+        return view('admin.users.index', compact('users', 'roles', 'types', 'title'));
     }
 
     public function create()
     {
+        $title = "Create User";
         $roles = Role::query()->orderBy('name')->get();
         $types = $this->userTypes();
 
-        return view('admin.users.create', compact('roles', 'types'));
+        return view('admin.users.create', compact('roles', 'types', 'title'));
     }
 
     public function store(Request $request)
@@ -106,11 +109,12 @@ class UserController extends Controller
 
     public function edit(User $user)
     {
+        $title = "Edit User";
         $roles = Role::query()->orderBy('name')->get();
         $types = $this->userTypes();
         $userRole = $user->getRoleNames()->first();
 
-        return view('admin.users.edit', compact('user', 'roles', 'types', 'userRole'));
+        return view('admin.users.edit', compact('user', 'roles', 'types', 'userRole', 'title'));
     }
 
     public function update(Request $request, User $user)

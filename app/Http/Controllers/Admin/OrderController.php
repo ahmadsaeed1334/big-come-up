@@ -17,6 +17,8 @@ class OrderController extends Controller
 {
     public function index(Request $request)
     {
+        $title = "Order";
+
         $query = Order::query()
             ->with(['user:id,name,email'])
             ->latest();
@@ -36,11 +38,13 @@ class OrderController extends Controller
 
         $orders = $query->paginate(10)->withQueryString();
 
-        return view('admin.orders.index', compact('orders'));
+        return view('admin.orders.index', compact('orders', 'title'));
     }
 
     public function create()
     {
+        $title = "Create Order";
+
         $users = User::query()->orderBy('name')->limit(200)->get(['id', 'name', 'email']);
         $products = Product::query()
             ->with('category:id,name')
@@ -48,7 +52,7 @@ class OrderController extends Controller
             ->orderBy('title')
             ->get(['id', 'category_id', 'title', 'sku', 'price', 'sale_price']);
 
-        return view('admin.orders.create', compact('users', 'products'));
+        return view('admin.orders.create', compact('users', 'products', 'title'));
     }
 
     public function store(Request $request)
@@ -134,6 +138,8 @@ class OrderController extends Controller
 
     public function edit(Order $order)
     {
+        $title = "Edit Order";
+
         $order->load(['items', 'user']);
 
         $users = User::query()->orderBy('name')->limit(200)->get(['id', 'name', 'email']);
@@ -142,7 +148,7 @@ class OrderController extends Controller
             ->orderBy('title')
             ->get(['id', 'category_id', 'title', 'sku', 'price', 'sale_price']);
 
-        return view('admin.orders.edit', compact('order', 'users', 'products'));
+        return view('admin.orders.edit', compact('order', 'users', 'products', 'title'));
     }
 
     public function update(Request $request, Order $order)

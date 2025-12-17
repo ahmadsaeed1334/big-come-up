@@ -13,6 +13,7 @@ class AffiliateController extends Controller
 {
     public function index(Request $request)
     {
+        $title = "Affiliates";
         $query = Affiliate::query()->with('user')->latest();
 
         if ($request->filled('status')) {
@@ -29,13 +30,14 @@ class AffiliateController extends Controller
 
         $affiliates = $query->paginate(10)->withQueryString();
 
-        return view('admin.affiliates.index', compact('affiliates'));
+        return view('admin.affiliates.index', compact('affiliates', 'title'));
     }
 
     public function create()
     {
+        $title = "Create Affiliate";
         $users = User::query()->orderBy('name')->get();
-        return view('admin.affiliates.create', compact('users'));
+        return view('admin.affiliates.create', compact('users', 'title'));
     }
 
     public function store(Request $request)
@@ -61,8 +63,9 @@ class AffiliateController extends Controller
 
     public function edit(Affiliate $affiliate)
     {
+        $title = "Edit Affiliate";
         $users = User::query()->orderBy('name')->get();
-        return view('admin.affiliates.edit', compact('affiliate', 'users'));
+        return view('admin.affiliates.edit', compact('affiliate', 'users', 'title'));
     }
 
     public function update(Request $request, Affiliate $affiliate)

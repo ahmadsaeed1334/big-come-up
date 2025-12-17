@@ -13,6 +13,7 @@ class EntryController extends Controller
 {
     public function index(Request $request)
     {
+        $title = "Entry";
         $query = Entry::query()->with(['user', 'competition'])->latest();
 
         // optional simple filters (safe defaults)
@@ -28,15 +29,16 @@ class EntryController extends Controller
 
         $competitions = Competition::query()->orderBy('title')->get(['id', 'title']);
 
-        return view('admin.entries.index', compact('entries', 'competitions'));
+        return view('admin.entries.index', compact('entries', 'competitions', 'title'));
     }
 
     public function create()
     {
+        $title = "Create Entry";
         $users = User::query()->orderBy('name')->get(['id', 'name', 'email']);
         $competitions = Competition::query()->orderBy('title')->get(['id', 'title', 'status']);
 
-        return view('admin.entries.create', compact('users', 'competitions'));
+        return view('admin.entries.create', compact('users', 'competitions', 'title'));
     }
 
     public function store(Request $request)
@@ -58,12 +60,13 @@ class EntryController extends Controller
 
     public function edit(Entry $entry)
     {
+        $title = "Edit Entry";
         $entry->load(['user', 'competition']);
 
         $users = User::query()->orderBy('name')->get(['id', 'name', 'email']);
         $competitions = Competition::query()->orderBy('title')->get(['id', 'title', 'status']);
 
-        return view('admin.entries.edit', compact('entry', 'users', 'competitions'));
+        return view('admin.entries.edit', compact('entry', 'users', 'competitions', 'title'));
     }
 
     public function update(Request $request, Entry $entry)

@@ -13,16 +13,18 @@ class CompetitionController extends Controller
 {
     public function index()
     {
+        $title = "Competition";
         $competitions = Competition::query()
             ->latest()
             ->paginate(10);
 
-        return view('admin.competitions.index', compact('competitions'));
+        return view('admin.competitions.index', compact('competitions', 'title'));
     }
 
     public function create()
     {
-        return view('admin.competitions.create');
+        $title = "Create Competition";
+        return view('admin.competitions.create', compact('title'));
     }
 
     public function store(Request $request)
@@ -61,7 +63,8 @@ class CompetitionController extends Controller
 
     public function edit(Competition $competition)
     {
-        return view('admin.competitions.edit', compact('competition'));
+        $title = "Edit Competition";
+        return view('admin.competitions.edit', compact('competition', 'title'));
     }
 
     public function update(Request $request, Competition $competition)
