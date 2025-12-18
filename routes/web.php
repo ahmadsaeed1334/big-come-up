@@ -20,9 +20,11 @@ use App\Http\Controllers\Affiliate\DashboardController;
 use App\Http\Controllers\Affiliate\TrackController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
-    return view('welcome');
-});
+// Route::get('/', function () {
+//     return view('welcome');
+// });
+Route::view('/', 'user-side.home.home')->name('user.home');
+
 Route::middleware(['auth', 'verified'])->get('/dashboard', function () {
     return view('dashboard');
 })->name('dashboard');
