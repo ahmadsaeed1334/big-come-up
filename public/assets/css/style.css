@@ -109,16 +109,27 @@ body {
     object-fit: contain;
 }
 
+/* default nav link */
 .nav-link-custom {
-    color: #1c1c1c !important;
-    font-weight: 600;
-    padding: 10px 14px !important;
-    border-radius: 999px;
+    color: #111;
+    font-weight: 500;
+    transition: none; /* no color animation */
 }
 
-.nav-link-custom:hover {
-    background: rgba(0, 0, 0, 0.05);
+/* ACTIVE state */
+.nav-link-custom.active {
+    color: #000 !important;
+    font-weight: 800;
 }
+
+/* hover pe bhi color same rahe */
+.nav-link-custom:hover {
+    color: #000;
+}
+
+/* .nav-link-custom:hover {
+    background: rgba(0, 0, 0, 0.05);
+} */
 
 .icon-chip {
     width: 44px;
@@ -565,8 +576,8 @@ body {
 }
 
 .spot-profile-btn:hover {
-    background: #fff;
-    color: #111;
+    background: #000;
+    color: #fff;
     border-color: rgba(0, 0, 0, 0.22);
 }
 
@@ -870,7 +881,7 @@ body {
 }
 
 .trend-watch:hover {
-    background: #fff;
+    background: #000;
     border-color: rgba(0, 0, 0, 0.28);
 }
 /* ===== READY TO JOIN CTA ===== */
@@ -979,8 +990,9 @@ body {
 }
 
 .join-btn-primary:hover {
-    background: #f5b22a;
-    color: #fff;
+    background: #fff;
+    border-color: #fff;
+    color: #111;
 }
 
 .join-btn-outline {
@@ -998,9 +1010,9 @@ body {
 }
 
 .join-btn-outline:hover {
-    background: transparent;
-    color: #fff;
-    border-color: rgba(255, 255, 255, 0.45);
+    background: #fff;
+    border-color: #fff;
+    color: #111;
 }
 
 /* arrow hover: only arrow moves, color change nahi */
@@ -1121,8 +1133,8 @@ body {
 }
 
 .merch-cart-btn:hover {
-    background: #fff;
-    color: #1a1a1a;
+    background: #000;
+    color: #fff;
     border-color: rgba(0, 0, 0, 0.3);
 }
 
@@ -1245,5 +1257,928 @@ body {
     }
     .footer-desc {
         max-width: 100%;
+    }
+}
+
+/* Competitions Page Hero */
+.page-hero {
+    position: relative;
+    overflow: hidden;
+    color: #fff;
+
+    /* same figma gradient */
+    background: linear-gradient(180deg, #130d2a 0%, #1a1a1a 100%);
+
+    padding: 110px 0 90px;
+}
+
+/* dots overlay (sirf is section me) */
+.page-hero::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: url("../images/dots.png") repeat;
+    opacity: 0.2;
+    pointer-events: none;
+    z-index: 0;
+}
+
+/* wave overlay (subtle) */
+.page-hero::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 20px;
+    height: 120px;
+
+    background: url("../images/wave.png") repeat-x;
+    background-size: 900px 90px;
+    opacity: 0.1;
+    filter: blur(0.2px);
+    pointer-events: none;
+    z-index: 0;
+}
+
+/* inner content on top */
+.page-hero .container,
+.page-hero__inner {
+    position: relative;
+    z-index: 2;
+}
+
+.page-hero__inner {
+    max-width: 760px;
+}
+
+.crumb-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+
+    padding: 10px 18px;
+    border-radius: 999px;
+
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    backdrop-filter: blur(6px);
+}
+
+.crumb-muted {
+    opacity: 0.7;
+    font-weight: 600;
+}
+.crumb-dot {
+    opacity: 0.5;
+}
+.crumb-strong {
+    font-weight: 800;
+}
+
+.page-hero__title {
+    margin: 18px 0 10px;
+    font-weight: 900;
+    letter-spacing: -0.02em;
+    font-size: clamp(34px, 4vw, 56px);
+    line-height: 1.05;
+}
+
+.page-hero__desc {
+    margin: 0 auto;
+    max-width: 680px;
+    color: rgba(255, 255, 255, 0.72);
+    font-size: 15px;
+    line-height: 1.7;
+}
+/* Live Competition Section */
+.comp-live {
+    background: #fff;
+    padding: 70px 0 90px;
+}
+
+.comp-live__title {
+    margin: 42px 0 22px;
+    font-size: 44px;
+    font-weight: 900;
+    letter-spacing: -0.02em;
+    color: #111;
+}
+
+/* Filters */
+.comp-filters {
+    margin-top: 10px;
+}
+
+.filter-pill {
+    background: #fff;
+    border: 1px solid #e7e7e7;
+    border-radius: 12px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.06);
+    padding: 0;
+}
+
+.filter-btn {
+    border: 0;
+    padding: 10px 18px;
+    border-radius: 12px;
+    font-weight: 600;
+    color: #111;
+    background: transparent;
+}
+
+.filter-btn:focus {
+    box-shadow: none;
+}
+.filter-pill .dropdown-menu {
+    border-radius: 12px;
+}
+
+/* Carousel wrapper */
+.comp-carousel {
+    max-width: 980px;
+    margin: 0 auto;
+}
+
+/* Big card */
+.comp-card {
+    position: relative;
+    border-radius: 0;
+    overflow: hidden;
+    border: 3px solid #2f96ff; /* blue outline like screenshot */
+    background: #000;
+}
+
+.comp-card__img {
+    width: 100%;
+    height: 420px;
+    object-fit: cover;
+    display: block;
+}
+
+.comp-card__overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+        90deg,
+        rgba(0, 0, 0, 0.78) 0%,
+        rgba(0, 0, 0, 0.2) 55%,
+        rgba(0, 0, 0, 0.3) 100%
+    );
+}
+
+/* badges top */
+.comp-card__badges {
+    position: absolute;
+    top: 18px;
+    left: 18px;
+    right: 18px;
+    display: flex;
+    justify-content: space-between;
+    z-index: 2;
+}
+
+.badge-left {
+    background: #f5b22a;
+    color: #fff;
+    font-weight: 800;
+    font-size: 12px;
+    padding: 10px 14px;
+    border-radius: 0;
+    text-transform: uppercase;
+}
+
+.badge-right {
+    background: #ff3b30;
+    color: #fff;
+    font-weight: 800;
+    font-size: 12px;
+    padding: 10px 14px;
+    border-radius: 0;
+    text-transform: uppercase;
+}
+
+/* content bottom-left */
+.comp-card__content {
+    position: absolute;
+    left: 22px;
+    bottom: 18px;
+    right: 22px;
+    z-index: 2;
+    color: #fff;
+}
+
+.comp-card__meta {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 6px;
+}
+
+.meta-live {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    opacity: 0.92;
+}
+
+.comp-card__name {
+    font-size: 24px;
+    font-weight: 900;
+    margin: 0 0 10px;
+}
+
+.comp-card__subpill {
+    display: inline-flex;
+    align-items: center;
+    padding: 8px 14px;
+    border-radius: 999px;
+    border: 1px solid rgba(255, 255, 255, 0.35);
+    background: rgba(0, 0, 0, 0.25);
+    font-size: 13px;
+    margin-bottom: 12px;
+}
+
+.comp-card__link {
+    display: flex;
+    /* display: inline-flex; */
+    align-items: center;
+    gap: 10px;
+    font-weight: 800;
+    color: #fff;
+    text-decoration: none;
+}
+
+.comp-card__link .arrow {
+    display: inline-block;
+    transition: transform 0.18s ease;
+}
+
+.comp-card__link:hover .arrow {
+    transform: translateX(6px);
+}
+
+/* prize bottom-right */
+.comp-card__prize {
+    position: absolute;
+    right: 22px;
+    bottom: 18px;
+    font-size: 18px;
+    font-weight: 600;
+    text-align: right;
+}
+
+.comp-card__prize strong {
+    font-weight: 900;
+}
+
+/* Dots (carousel indicators) */
+.comp-dots {
+    position: static;
+    margin-top: 16px;
+    gap: 10px;
+}
+
+.comp-dots [data-bs-target] {
+    width: 36px;
+    height: 6px;
+    border-radius: 99px;
+    border: 0;
+    opacity: 0.25;
+    background: #111;
+}
+
+.comp-dots .active {
+    opacity: 1;
+    background: #5a1d27; /* maroon like screenshot */
+}
+/* Upcoming Competitions */
+.upcoming-comp {
+    background: #fff;
+    padding: 60px 0 70px;
+}
+
+.upcoming-title {
+    font-size: 34px;
+    font-weight: 900;
+    color: #111;
+    margin-bottom: 22px;
+}
+
+/* card base */
+.up-card {
+    position: relative;
+    min-height: 250px;
+    border-radius: 0;
+    overflow: hidden;
+    padding: 22px 22px 26px;
+    color: #fff;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+/* gradients like screenshot */
+.up-card--purple {
+    background: linear-gradient(180deg, #130d2a 0%, #1a1a1a 100%);
+}
+.up-card--maroon {
+    background: linear-gradient(180deg, #5a1d27 0%, #1a1a1a 100%);
+}
+
+/* dots overlay */
+.up-card::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: url("../images/dots.png") repeat;
+    opacity: 0.2;
+    pointer-events: none;
+    z-index: 0;
+}
+
+/* soft vignette */
+.up-card::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(
+        650px 320px at 20% 35%,
+        rgba(255, 255, 255, 0.1),
+        transparent 70%
+    );
+    opacity: 0.55;
+    pointer-events: none;
+    z-index: 0;
+}
+
+/* top row */
+.up-top {
+    position: absolute;
+    top: 14px;
+    left: 14px;
+    right: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    z-index: 2;
+}
+
+.up-chip {
+    background: rgba(255, 255, 255, 0.14);
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    padding: 7px 10px;
+    font-size: 11px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+}
+
+.up-date {
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+    background: rgba(255, 255, 255, 0.12);
+    border: 1px solid rgba(255, 255, 255, 0.18);
+}
+.up-date .d {
+    padding: 7px 10px;
+    font-weight: 900;
+    font-size: 12px;
+}
+.up-date .m {
+    padding: 7px 12px;
+    border-left: 1px solid rgba(255, 255, 255, 0.18);
+    font-weight: 800;
+    font-size: 11px;
+    text-transform: uppercase;
+}
+
+/* heading */
+.up-h {
+    position: relative;
+    z-index: 2;
+    font-size: 30px;
+    font-weight: 900;
+    line-height: 1.12;
+    margin-top: 18px;
+    margin-bottom: 14px;
+    max-width: 78%;
+}
+
+/* button */
+.up-btn {
+    position: relative;
+    z-index: 2;
+    width: fit-content;
+    padding: 12px 18px;
+    border-radius: 999px;
+    background: #f5b22a;
+    color: #fff;
+    font-weight: 800;
+    border: 0;
+}
+
+.up-btn:hover {
+    background: #f5b22a; /* hover pe color change nahi */
+    color: #fff;
+}
+
+.up-arrow {
+    display: inline-block;
+    margin-left: 8px;
+    transition: transform 0.18s ease;
+}
+.up-btn:hover .up-arrow {
+    transform: translateX(7px);
+}
+
+/* person image */
+.up-person {
+    position: absolute;
+    right: 22px;
+    bottom: 0;
+    height: 88%;
+    width: auto;
+    z-index: 1;
+    pointer-events: none;
+    filter: drop-shadow(0 18px 28px rgba(0, 0, 0, 0.35));
+}
+
+.up-person--right {
+    right: 18px;
+    height: 95%;
+}
+
+/* full width card: center text like screenshot */
+@media (min-width: 992px) {
+    .up-card--maroon .up-h {
+        max-width: 62%;
+        font-size: 34px;
+    }
+}
+
+/* mobile tweaks */
+@media (max-width: 575.98px) {
+    .up-h {
+        max-width: 100%;
+        font-size: 24px;
+    }
+    .up-person {
+        height: 70%;
+        right: 10px;
+    }
+}
+/* Comedians CTA */
+.comedy-cta {
+    position: relative;
+    isolation: isolate;
+    padding: 80px 0 90px;
+    color: #fff;
+    overflow: hidden;
+
+    /* same dark bg feel */
+    background: linear-gradient(180deg, #130d2a 0%, #1a1a1a 100%);
+}
+
+/* dots overlay */
+.comedy-cta::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: url("../images/dots.png") repeat;
+    opacity: 0.2;
+    pointer-events: none;
+    z-index: -2;
+}
+
+/* wave overlays (left + right) */
+.comedy-cta::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: url("../images/wave.png") left 12% center / 520px 70px no-repeat,
+        url("../images/wave.png") right 12% center / 520px 70px no-repeat;
+    opacity: 0.22;
+    pointer-events: none;
+    z-index: -1;
+}
+
+/* text container */
+.comedy-inner {
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.comedy-title {
+    font-size: 44px;
+    font-weight: 900;
+    line-height: 1.1;
+    margin-bottom: 10px;
+}
+
+.comedy-text {
+    margin: 0 auto 22px;
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 14px;
+    line-height: 1.7;
+}
+
+/* button like screenshot (yellow pill) */
+.comedy-btn {
+    padding: 14px 26px;
+    border-radius: 999px;
+    background: #f5b22a;
+    color: #fff;
+    font-weight: 800;
+    border: 0;
+}
+
+.comedy-btn:hover {
+    background: #f5b22a; /* hover pe color change nahi */
+    color: #fff;
+}
+
+.comedy-arrow {
+    display: inline-block;
+    margin-left: 10px;
+    transition: transform 0.18s ease;
+}
+.comedy-btn:hover .comedy-arrow {
+    transform: translateX(7px);
+}
+
+/* responsive */
+@media (max-width: 575.98px) {
+    .comedy-title {
+        font-size: 28px;
+    }
+    .comedy-cta::after {
+        background: url("../images/wave.png") left 0% center / 360px 55px
+                no-repeat,
+            url("../images/wave.png") right 0% center / 360px 55px no-repeat;
+    }
+}
+
+/* ========= COMPETITION SINGLE PAGE (FIGMA STACK FIX) ========= */
+
+.comp-hero {
+    padding-top: 70px;
+    padding-bottom: 110px;
+} /* extra bottom so overlap looks correct */
+
+/* breadcrumb pill */
+.crumb-pill {
+    width: fit-content;
+    padding: 10px 18px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    backdrop-filter: blur(8px);
+    font-size: 14px;
+}
+
+.live-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #ff3b30;
+    display: inline-block;
+    box-shadow: 0 0 0 6px rgba(255, 59, 48, 0.18);
+}
+
+/* buttons */
+.btn-cta-amber {
+    background: var(--cta, #f5b22a);
+    border: 1px solid transparent;
+    color: #fff;
+    border-radius: 999px;
+    padding: 14px 22px;
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    box-shadow: 0 10px 28px rgba(0, 0, 0, 0.25);
+}
+.btn-cta-outline {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.35);
+    color: #fff;
+    border-radius: 999px;
+    padding: 14px 22px;
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    backdrop-filter: blur(8px);
+}
+.btn-sm-pill {
+    padding: 12px 20px;
+}
+
+.btn-share-pill {
+    background: rgba(255, 255, 255, 0.14);
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    color: #fff;
+    border-radius: 999px;
+    padding: 12px 18px;
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    backdrop-filter: blur(8px);
+}
+
+/* arrow animation (color change nahi, only arrow stretch + text shift left) */
+.btn-arrow,
+.nav-arrow {
+    display: inline-block;
+    width: 18px;
+    text-align: right;
+    transition: width 0.18s ease;
+}
+.btn-text {
+    transition: transform 0.18s ease;
+}
+.btn-cta-amber:hover .btn-arrow,
+.btn-cta-outline:hover .btn-arrow,
+.btn-login:hover .nav-arrow {
+    width: 28px;
+}
+.btn-cta-amber:hover .btn-text,
+.btn-cta-outline:hover .btn-text,
+.btn-login:hover .btn-text {
+    transform: translateX(-6px);
+}
+
+/* ===== VIDEO STAGE (white) overlap hero ===== */
+/* ===== VIDEO STAGE - sits on hero, NO white bg ===== */
+/* ===== VIDEO STAGE SPACING FIX ===== */
+/* Yeh spacing video ke neeche aur buttons ke beech mein add karegi */
+.video-stage {
+    position: relative;
+    z-index: 5;
+    margin-top: -80px; /* Pull UP into hero */
+    padding-top: 0;
+    padding-bottom: 80px; /* Added: Space below video for buttons */
+}
+
+.video-card-wrap {
+    max-width: 980px;
+    margin: 0 auto;
+}
+
+/* Updated video actions - more spacing */
+.video-actions {
+    position: relative;
+    z-index: 20;
+    margin-top: 40px; /* Changed: Positive margin for spacing */
+    padding-bottom: 30px;
+}
+
+/* ===== MAROON TABS SECTION ADJUSTMENT ===== */
+.comp-tabs-shell {
+    position: relative;
+    color: #fff;
+    background: linear-gradient(180deg, #3b0d16 0%, #1a0b10 100%);
+    overflow: hidden;
+    z-index: 1;
+    margin-top: 0; /* Changed: Remove negative margin */
+    padding-top: 60px; /* Reduced: Less padding since video has spacing now */
+    padding-bottom: 60px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 991px) {
+    .video-stage {
+        margin-top: -30px;
+        padding-bottom: 60px; /* Adjusted for mobile */
+    }
+    .video-card-wrap {
+        margin-top: 30px;
+    }
+    .video-actions {
+        margin-top: 30px;
+        padding-bottom: 25px;
+    }
+    .comp-tabs-shell {
+        padding-top: 50px;
+    }
+}
+
+@media (max-width: 576px) {
+    .video-stage {
+        margin-top: -10px;
+        padding-bottom: 40px; /* Adjusted for mobile */
+    }
+    .video-card-wrap {
+        margin-top: 20px;
+    }
+    .video-actions {
+        margin-top: 25px;
+    }
+    .comp-tabs-shell {
+        padding-top: 40px;
+    }
+}
+/* video card */
+.video-card-wrap {
+    max-width: 980px;
+    margin-bottom: -50px; /* Create overlap for buttons */
+}
+/* video card */
+.video-card {
+    border-radius: 10px;
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    overflow: hidden;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+    background: #000;
+}
+
+/* badges on video - inside video card */
+.video-badges {
+    position: absolute;
+    top: 14px;
+    left: 14px;
+    z-index: 10;
+}
+.video-badges-right {
+    position: absolute;
+    top: 14px;
+    right: 14px;
+    z-index: 10;
+}
+
+.badge-amber {
+    background: #f5b22a;
+    color: #fff;
+    border-radius: 4px;
+    padding: 8px 12px;
+    font-weight: 700;
+    font-size: 12px;
+    text-transform: uppercase;
+}
+.badge-red {
+    background: #ff3b30;
+    color: #fff;
+    border-radius: 4px;
+    padding: 8px 12px;
+    font-weight: 800;
+    font-size: 12px;
+    text-transform: uppercase;
+}
+
+/* actions OVERLAP bottom of video */
+.video-actions {
+    position: relative;
+    z-index: 20;
+    margin-top: -50px; /* Negative margin to overlap video */
+    padding-bottom: 30px;
+}
+
+/* ===== MAROON TABS SECTION - comes up behind buttons ===== */
+.comp-tabs-shell {
+    position: relative;
+    color: #fff;
+    background: linear-gradient(180deg, #3b0d16 0%, #1a0b10 100%);
+    overflow: hidden;
+    z-index: 1;
+    margin-top: -80px; /* Pull up behind the buttons */
+    padding-top: 120px; /* Space for buttons above */
+    padding-bottom: 60px;
+}
+
+/* dots overlay */
+.comp-tabs-shell::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: url("../images/dots.png") repeat;
+    opacity: 0.2;
+    pointer-events: none;
+}
+
+/* wave left/right */
+.comp-tabs-shell::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image: url("../images/wave.png"), url("../images/wave.png");
+    background-repeat: no-repeat, no-repeat;
+    background-size: 520px auto, 520px auto;
+    background-position: left 40%, right 40%;
+    opacity: 0.35;
+    pointer-events: none;
+}
+
+/* tabs */
+.comp-tabs {
+    width: fit-content;
+    margin-inline: auto;
+    padding: 6px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    backdrop-filter: blur(10px);
+    gap: 8px;
+}
+.comp-tabs .nav-link {
+    border-radius: 999px;
+    padding: 10px 20px;
+    color: rgba(255, 255, 255, 0.7);
+    font-weight: 600;
+    font-size: 15px;
+    border: 1px solid transparent;
+    transition: all 0.3s ease;
+}
+.comp-tabs .nav-link:hover {
+    color: rgba(255, 255, 255, 0.9);
+    background: rgba(255, 255, 255, 0.05);
+}
+.comp-tabs .nav-link.active {
+    background: rgba(255, 255, 255, 0.92);
+    color: #111;
+    border: 1px solid rgba(255, 255, 255, 0.95);
+}
+
+/* glass cards */
+.glass-card {
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    border-radius: 12px;
+    box-shadow: 0 18px 50px rgba(0, 0, 0, 0.25);
+    backdrop-filter: blur(12px);
+}
+.border-soft {
+    border-color: rgba(255, 255, 255, 0.12) !important;
+}
+
+.prize-strip {
+    border-radius: 12px;
+    padding: 20px;
+    background: linear-gradient(
+        90deg,
+        rgba(10, 7, 23, 0.4),
+        rgba(10, 7, 23, 0.7)
+    );
+    border: 1px solid rgba(255, 255, 255, 0.16);
+    position: relative;
+    overflow: hidden;
+}
+.prize-strip::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: url("../images/wave.png") no-repeat center;
+    background-size: 680px auto;
+    opacity: 0.18;
+    pointer-events: none;
+}
+
+/* Responsive */
+@media (max-width: 991px) {
+    .comp-hero {
+        padding-top: 40px;
+        padding-bottom: 100px;
+    }
+    .video-stage {
+        margin-top: -30px;
+    }
+    .video-card-wrap {
+        margin-bottom: -40px;
+    }
+    .video-actions {
+        margin-top: -40px;
+        padding-bottom: 25px;
+    }
+    .comp-tabs-shell {
+        margin-top: -60px;
+        padding-top: 100px;
+    }
+    .comp-tabs-shell::after {
+        background-size: 380px auto, 380px auto;
+        background-position: left 30%, right 30%;
+    }
+}
+
+@media (max-width: 576px) {
+    .video-stage {
+        margin-top: -10px;
+    }
+    .video-card-wrap {
+        margin-bottom: -35px;
+    }
+    .video-actions {
+        margin-top: -35px;
+    }
+    .comp-tabs-shell {
+        margin-top: -50px;
+        padding-top: 85px;
+    }
+    .comp-tabs {
+        flex-wrap: wrap;
+    }
+    .comp-tabs .nav-link {
+        padding: 8px 16px;
+        font-size: 14px;
     }
 }

@@ -24,6 +24,8 @@ use Illuminate\Support\Facades\Route;
 //     return view('welcome');
 // });
 Route::view('/', 'user-side.home.home')->name('user.home');
+Route::view('/competitions', 'user-side.competitions.index')->name('competitios.index');
+Route::view('/competitions/show', 'user-side.competitions.show')->name('competitios.show');
 
 Route::middleware(['auth', 'verified'])->get('/dashboard', function () {
     return view('dashboard');

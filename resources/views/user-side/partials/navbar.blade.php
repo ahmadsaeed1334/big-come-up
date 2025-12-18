@@ -16,8 +16,11 @@
               <div class="collapse navbar-collapse" id="mainNav">
                   <ul class="navbar-nav mx-auto align-items-lg-center">
                       <li class="nav-item">
-                          <a class="nav-link nav-link-custom" data-nav href="{{ url('/') }}">Home</a>
+                          <a class="nav-link nav-link-custom @activeRoute('user.home')" href="{{ route('user.home') }}">
+                              Home
+                          </a>
                       </li>
+
 
                       <li class="nav-item dropdown">
                           <a class="nav-link nav-link-custom dropdown-toggle" href="#" role="button"
