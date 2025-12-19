@@ -40,7 +40,7 @@ body {
 }
 .hero-shell > * {
     position: relative;
-    z-index: 2;
+    /* z-index: 2; */
 }
 
 .space-bg {
@@ -1918,6 +1918,18 @@ body {
     background: var(--cta, #f5b22a);
     border: 1px solid transparent;
     color: #fff;
+    border-radius: 999px;
+    padding: 14px 22px;
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    box-shadow: 0 10px 28px rgba(0, 0, 0, 0.25);
+}
+.btn-cta-amber:hover {
+    background: #fff;
+    border: 1px solid transparent;
+    color: #000;
     border-radius: 999px;
     padding: 14px 22px;
     font-weight: 600;

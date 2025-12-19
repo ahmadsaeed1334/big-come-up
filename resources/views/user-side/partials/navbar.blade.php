@@ -23,28 +23,53 @@
 
 
                       <li class="nav-item dropdown artists-dd">
-                          <a class="nav-link nav-link-custom dropdown-toggle" href="#" role="button"
-                              data-bs-toggle="dropdown" aria-expanded="false">
+                          <a class="nav-link nav-link-custom dropdown-toggle 
+        @activeRoute('artists.djs')" href="#"
+                              role="button" data-bs-toggle="dropdown" aria-expanded="false">
                               Artists
                           </a>
 
                           <ul class="dropdown-menu artists-menu">
-                              {{-- Active item like figma (white pill) --}}
                               <li>
-                                  <a class="dropdown-item active" href="{{ route('artists.djs') }}">DJs</a>
+                                  <a class="dropdown-item @activeRoute('artists.djs')" href="{{ route('artists.djs') }}">
+                                      DJs
+                                  </a>
                               </li>
-                              <li><a class="dropdown-item" href="">Musicians</a></li>
-                              <li><a class="dropdown-item" href="">Producer</a></li>
-                              <li><a class="dropdown-item" href="">Comedian</a></li>
-                              <li><a class="dropdown-item" href="">Under The
-                                      Spotlight</a></li>
+                              <li><a class="dropdown-item" href="#">Musicians</a></li>
+                              <li><a class="dropdown-item" href="#">Producer</a></li>
+                              <li><a class="dropdown-item" href="#">Comedian</a></li>
+                              <li><a class="dropdown-item" href="#">Under The Spotlight</a></li>
                           </ul>
                       </li>
 
 
-                      <li class="nav-item">
-                          <a class="nav-link nav-link-custom" href="#">Competitions</a>
+                      <li class="nav-item dropdown artists-dd">
+                          <a class="nav-link nav-link-custom dropdown-toggle 
+        @activeRoute('competitios.index|competitios.show')" href="#"
+                              role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                              Competitions
+                          </a>
+
+                          <ul class="dropdown-menu artists-menu">
+                              <li>
+                                  <a class="dropdown-item @activeRoute('competitios.index')" href="{{ route('competitios.index') }}">
+                                      All Competitions
+                                  </a>
+                              </li>
+
+                              <li>
+                                  <a class="dropdown-item @activeRoute('competitios.show')" href="{{ route('competitios.show') }}">
+                                      Competition Details
+                                  </a>
+                              </li>
+                          </ul>
                       </li>
+                      <li class="nav-item">
+                          <a class="nav-link nav-link-custom @activeRoute('judges.show')" href="{{ route('judges.show') }}">
+                              Judges
+                          </a>
+                      </li>
+
                       <li class="nav-item">
                           <a class="nav-link nav-link-custom" href="#">Community</a>
                       </li>
