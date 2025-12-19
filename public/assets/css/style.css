@@ -127,6 +127,72 @@ body {
     color: #000;
 }
 
+/* ===== Artists Dropdown (Figma style) ===== */
+
+.artists-dd .dropdown-toggle::after {
+    margin-left: 0.45rem;
+    border-top: 0.35em solid;
+    border-right: 0.35em solid transparent;
+    border-left: 0.35em solid transparent;
+    vertical-align: 0.15em;
+}
+
+/* dropdown menu shell */
+.artists-menu {
+    margin-top: 34px !important;
+    padding: 14px 14px;
+    min-width: 280px;
+
+    border-radius: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    background: rgba(35, 33, 50, 0.55); /* glass dark */
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+
+    box-shadow: 0 18px 60px rgba(0, 0, 0, 0.35);
+}
+
+/* remove default bootstrap caret spacing issues */
+.artists-menu .dropdown-item {
+    border-radius: 999px; /* pill items */
+    padding: 5px 14px;
+    margin: 6px 0;
+
+    color: rgba(255, 255, 255, 0.8);
+    font-weight: 500;
+    background: transparent;
+
+    transition: 0.18s ease;
+}
+
+/* hover */
+.artists-menu .dropdown-item:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: rgba(255, 255, 255, 0.92);
+}
+
+/* active (white top pill like figma) */
+.artists-menu .dropdown-item.active,
+.artists-menu .dropdown-item:active {
+    background: #ffffff !important;
+    color: #111 !important;
+    font-weight: 600;
+}
+
+/* stop bootstrap focus outline */
+.artists-menu .dropdown-item:focus {
+    background: rgba(255, 255, 255, 0.1);
+    color: rgba(255, 255, 255, 0.92);
+    outline: none;
+}
+
+/* optional: dropdown position thora center feel */
+@media (min-width: 992px) {
+    .artists-dd .dropdown-menu {
+        transform: translateX(-12px);
+    }
+}
+
 /* .nav-link-custom:hover {
     background: rgba(0, 0, 0, 0.05);
 } */
@@ -2180,5 +2246,556 @@ body {
     .comp-tabs .nav-link {
         padding: 8px 16px;
         font-size: 14px;
+    }
+}
+
+/* ========= DJs PAGE ========= */
+
+/* HERO SHELL (dots + waves) */
+.dj-hero-shell {
+    position: relative;
+    isolation: isolate;
+    color: #fff;
+    background: linear-gradient(180deg, #130d2a 0%, #1a1a1a 100%);
+    overflow: hidden;
+}
+
+/* dots */
+.dj-hero-shell::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: url("../images/dots.png") repeat; /* adjust path */
+    opacity: 0.2;
+    pointer-events: none;
+    z-index: -2;
+}
+
+/* waves left/right */
+.dj-hero-shell::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image: url("../images/wave.png"), url("../images/wave.png"); /* adjust path */
+    background-repeat: no-repeat, no-repeat;
+    background-size: 520px auto, 520px auto;
+    background-position: left 50%, right 50%;
+    opacity: 0.35;
+    pointer-events: none;
+    z-index: -1;
+}
+
+/* hero spacing */
+.dj-hero {
+    padding-top: 70px;
+    padding-bottom: 70px;
+}
+
+.dj-hero-title {
+    font-size: clamp(34px, 4vw, 54px);
+    font-weight: 800;
+    letter-spacing: -0.02em;
+}
+
+.dj-hero-subtitle {
+    max-width: 720px;
+    color: rgba(255, 255, 255, 0.72);
+    font-size: 15px;
+    line-height: 1.7;
+}
+
+/* ===== LISTING ===== */
+.dj-listing {
+    background: #fff;
+    padding-top: 70px;
+    padding-bottom: 80px;
+}
+
+/* card */
+.spot-card {
+    background: #fff;
+    border-radius: 14px;
+    border: 1px solid rgba(0, 0, 0, 0.06);
+    box-shadow: 0 14px 40px rgba(0, 0, 0, 0.08);
+    overflow: hidden;
+}
+
+.spot-cover {
+    height: 92px;
+    overflow: hidden;
+}
+.spot-cover img {
+    height: 100%;
+    object-fit: cover;
+}
+
+/* body */
+.spot-body {
+    position: relative;
+    padding: 18px 16px 16px;
+}
+
+/* avatar overlaps cover */
+.spot-avatar {
+    position: absolute;
+    left: 16px;
+    top: -28px;
+    width: 58px;
+    height: 58px;
+    border-radius: 50%;
+    overflow: hidden;
+    border: 3px solid #fff;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+    background: #eee;
+}
+.spot-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* followers chip (right) */
+.spot-followers {
+    margin-left: auto;
+    width: fit-content;
+    padding: 6px 10px;
+    border-radius: 999px;
+    background: rgba(0, 0, 0, 0.06);
+    color: rgba(0, 0, 0, 0.55);
+    font-size: 12px;
+    font-weight: 600;
+}
+
+/* name */
+.spot-name {
+    margin-top: 18px;
+    margin-bottom: 6px;
+    font-weight: 800;
+    font-size: 15px;
+    color: #111;
+}
+
+/* location */
+.spot-loc {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    color: rgba(0, 0, 0, 0.55);
+    font-size: 12px;
+    margin-bottom: 10px;
+}
+.spot-loc i {
+    font-size: 13px;
+}
+
+/* tags */
+.spot-tags {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-bottom: 14px;
+}
+.tag-pill {
+    font-size: 11px;
+    padding: 5px 10px;
+    border-radius: 999px;
+    background: rgba(0, 0, 0, 0.06);
+    color: rgba(0, 0, 0, 0.55);
+    font-weight: 600;
+}
+
+/* button */
+.spot-btn {
+    display: block;
+    text-align: center;
+    width: 100%;
+    border-radius: 999px;
+    padding: 10px 12px;
+    border: 1px solid rgba(0, 0, 0, 0.12);
+    color: #111;
+    font-weight: 700;
+    font-size: 13px;
+    text-decoration: none;
+    transition: 0.18s ease;
+}
+.spot-btn:hover {
+    background: #000;
+    color: #fff;
+    border-color: rgba(0, 0, 0, 0.22);
+}
+
+/* pagination */
+.dj-pagination {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+.pg-btn,
+.pg-num {
+    width: 34px;
+    height: 34px;
+    display: grid;
+    place-items: center;
+    border-radius: 4px;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    background: #fff;
+    color: #111;
+    text-decoration: none;
+    font-weight: 700;
+    font-size: 13px;
+}
+.pg-num.active {
+    background: #7a3b18; /* brown active */
+    border-color: #7a3b18;
+    color: #fff;
+}
+.pg-btn.disabled {
+    opacity: 0.45;
+    pointer-events: none;
+}
+.pg-dots {
+    color: rgba(0, 0, 0, 0.5);
+    font-weight: 700;
+    padding-inline: 6px;
+}
+
+/* responsive wave */
+@media (max-width: 991px) {
+    .dj-hero-shell::after {
+        background-size: 380px auto, 380px auto;
+        background-position: left 45%, right 45%;
+    }
+}
+
+/* ===== JUDGE PAGE ===== */
+
+.judge-hero {
+    position: relative;
+}
+.judge-hero__bg {
+    position: relative;
+    min-height: 360px;
+    background-size: cover;
+    background-position: center;
+}
+.judge-hero__overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+        180deg,
+        rgba(10, 7, 23, 0.25) 0%,
+        rgba(10, 7, 23, 0.8) 70%,
+        rgba(10, 7, 23, 1) 100%
+    );
+}
+
+.judge-wrap {
+    padding: 20px 0 70px; /* white section spacing */
+    background: #fff;
+}
+
+.judge-wrap .container {
+    margin-top: 0; /* NO overlap on whole row */
+    position: relative;
+    z-index: 3;
+}
+
+/* ONLY LEFT CARD overlaps hero */
+.judge-overlap-left {
+    margin-top: -140px; /* adjust as per figma */
+    position: relative;
+    z-index: 5;
+}
+
+/* right panel stays normal in white area */
+.judge-panel {
+    margin-top: 0;
+}
+/* LEFT CARD */
+.judge-card {
+    background: #fff;
+    border-radius: 14px;
+    box-shadow: 0 18px 60px rgba(0, 0, 0, 0.12);
+    padding: 90px 26px 26px;
+    position: relative;
+    overflow: visible;
+}
+.judge-avatar {
+    width: 124px;
+    height: 124px;
+    border-radius: 10px;
+    overflow: hidden;
+    position: absolute;
+    top: -62px;
+    left: 26px;
+    background: #fff;
+    border: 3px solid #fff;
+    box-shadow: 0 14px 40px rgba(0, 0, 0, 0.18);
+}
+.judge-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+.judge-name {
+    font-weight: 800;
+    font-size: 28px;
+    margin: 0 0 6px;
+    color: #111;
+}
+.judge-loc {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    color: #6b7280;
+    font-size: 14px;
+}
+.judge-sep {
+    margin: 16px 0;
+    opacity: 0.15;
+}
+.judge-bio {
+    color: #6b7280;
+    font-size: 14px;
+    line-height: 1.6;
+    margin-bottom: 14px;
+}
+.judge-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+.chip {
+    padding: 8px 12px;
+    border-radius: 999px;
+    background: rgba(17, 17, 17, 0.06);
+    color: rgba(17, 17, 17, 0.65);
+    font-size: 12px;
+    border: 1px solid rgba(17, 17, 17, 0.08);
+}
+
+/* RIGHT PANEL */
+.judge-panel {
+    position: relative;
+    border-radius: 14px;
+    padding: 22px;
+    background: linear-gradient(180deg, #0a0717 0%, #130d2a 100%);
+    overflow: hidden;
+    box-shadow: 0 18px 60px rgba(0, 0, 0, 0.18);
+}
+
+/* dots overlay */
+.judge-panel::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: url("../images/dots.png") repeat;
+    opacity: 0.2;
+    pointer-events: none;
+}
+
+/* subtle inner glow */
+.judge-panel::after {
+    content: "";
+    position: absolute;
+    inset: -120px;
+    background: radial-gradient(
+            600px 260px at 20% 15%,
+            rgba(255, 255, 255, 0.1),
+            transparent 65%
+        ),
+        radial-gradient(
+            700px 300px at 85% 35%,
+            rgba(255, 255, 255, 0.08),
+            transparent 70%
+        );
+    pointer-events: none;
+    filter: blur(10px);
+}
+
+.judge-panel > * {
+    position: relative;
+    z-index: 2;
+}
+
+/* GLASS BOXES */
+.glass-box {
+    border-radius: 14px;
+    padding: 18px;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.16);
+    backdrop-filter: blur(10px);
+    box-shadow: 0 18px 50px rgba(0, 0, 0, 0.25);
+}
+.glass-title {
+    margin: 0 0 12px;
+    font-weight: 700;
+    color: #fff;
+    font-size: 18px;
+}
+
+.checklist {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+.checklist li {
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+    color: rgba(255, 255, 255, 0.85);
+    font-size: 13px;
+    padding: 7px 0;
+}
+.checklist i {
+    color: rgba(255, 255, 255, 0.85);
+    margin-top: 2px;
+}
+
+/* credentials table */
+.cred-table {
+    margin-top: 8px;
+}
+.cred-row {
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 12px 0;
+    border-top: 1px dashed rgba(255, 255, 255, 0.16);
+}
+.cred-row:first-child {
+    border-top: none;
+}
+.cred-k {
+    color: rgba(255, 255, 255, 0.7);
+    font-weight: 600;
+    font-size: 12px;
+}
+.cred-v {
+    color: rgba(255, 255, 255, 0.9);
+    font-weight: 600;
+    font-size: 12px;
+    text-align: right;
+}
+
+/* mini glass */
+.mini-glass {
+    border-radius: 14px;
+    padding: 16px;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.16);
+    backdrop-filter: blur(10px);
+}
+.mini-title {
+    margin: 0 0 10px;
+    color: #fff;
+    font-weight: 700;
+}
+.mini-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: rgba(255, 255, 255, 0.85);
+    font-size: 13px;
+}
+.mini-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+.mini-list li {
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+    color: rgba(255, 255, 255, 0.85);
+    font-size: 13px;
+    padding: 8px 0;
+}
+.mini-list i {
+    margin-top: 2px;
+}
+
+/* live dot */
+.live-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: #ff3b30;
+    box-shadow: 0 0 0 6px rgba(255, 59, 48, 0.18);
+    display: inline-block;
+}
+
+/* CTA row */
+.glass-cta {
+    border-radius: 14px;
+    padding: 18px;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.16);
+    backdrop-filter: blur(10px);
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 14px;
+}
+.glass-cta h5 {
+    margin: 0;
+    color: #fff;
+    font-weight: 800;
+    font-size: 18px;
+}
+
+/* your existing amber button styles (same you used before) */
+.btn-cta-amber {
+    background: var(--cta, #f5b22a);
+    border: 1px solid transparent;
+    color: #fff;
+    border-radius: 999px;
+    padding: 14px 22px;
+    font-weight: 700;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    box-shadow: 0 10px 28px rgba(0, 0, 0, 0.25);
+    text-decoration: none;
+}
+
+/* arrow animation (no color change, only arrow stretch + text shift left) */
+.btn-arrow {
+    display: inline-block;
+    width: 18px;
+    text-align: right;
+    transition: width 0.18s ease;
+}
+.btn-text {
+    transition: transform 0.18s ease;
+}
+.btn-cta-amber:hover .btn-arrow {
+    width: 28px;
+}
+.btn-cta-amber:hover .btn-text {
+    transform: translateX(-6px);
+}
+
+/* RESPONSIVE */
+@media (max-width: 991px) {
+    .judge-wrap .container {
+        margin-top: -90px;
+    }
+    .glass-cta {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+}
+@media (max-width: 575px) {
+    .judge-card {
+        padding: 82px 18px 18px;
+    }
+    .judge-avatar {
+        left: 18px;
+    }
+    .judge-name {
+        font-size: 24px;
     }
 }
