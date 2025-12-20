@@ -127,6 +127,460 @@ body {
     color: #000;
 }
 
+/* ===== SUBMISSIONS TAB ===== */
+.submissions-title {
+    font-size: 36px;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    color: #fff;
+}
+
+.submissions-filters .dropdown-toggle::after {
+    margin-left: 10px;
+}
+
+.filter-pill {
+    border-radius: 10px;
+    padding: 10px 14px;
+    color: rgba(255, 255, 255, 0.85);
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.16);
+    backdrop-filter: blur(10px);
+    font-weight: 600;
+    font-size: 14px;
+}
+.filter-pill:hover {
+    color: rgba(255, 255, 255, 0.95);
+    background: rgba(255, 255, 255, 0.1);
+    border-color: rgba(255, 255, 255, 0.22);
+}
+
+.filter-menu {
+    background: rgba(20, 10, 14, 0.92);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 10px;
+    padding: 8px;
+}
+.filter-menu .dropdown-item {
+    border-radius: 8px;
+    color: rgba(255, 255, 255, 0.8);
+    padding: 10px 10px;
+}
+.filter-menu .dropdown-item:hover {
+    background: rgba(255, 255, 255, 0.08);
+    color: #fff;
+}
+
+/* Card */
+.submission-card {
+    background: linear-gradient(180deg, #4d151e, #2a0e13);
+    border-radius: 20px;
+    padding: 14px; /* 🔑 IMAGE SE SPACE */
+    position: relative;
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.15),
+        inset 0 0 40px rgba(255, 255, 255, 0.6), 0 30px 70px rgba(0, 0, 0, 0.6);
+}
+
+.submission-image {
+    position: relative;
+    border-radius: 16px;
+    overflow: hidden;
+    margin-bottom: 16px;
+
+    /* 🔥 WHITE INNER GLOW (FIGMA STYLE) */
+    box-shadow: inset 0 0 25px rgba(255, 255, 255, 0.22),
+        inset 0 0 60px rgba(255, 255, 255, 0.08),
+        0 20px 45px rgba(0, 0, 0, 0.45);
+}
+
+.submission-image img {
+    width: 100%;
+    display: block;
+    border-radius: 14px;
+}
+
+/* .submission-card:hover {
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.45),
+        inset 0 0 40px rgba(255, 255, 255, 0.18), 0 30px 70px rgba(0, 0, 0, 0.6);
+
+    transform: translateY(-4px);
+} */
+
+.submission-cover {
+    position: relative;
+    height: 185px;
+    overflow: hidden;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+.submission-cover img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transform: scale(1.02);
+}
+
+.role-tag {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    background: rgba(255, 255, 255, 0.92);
+    color: #111;
+    font-weight: 800;
+    font-size: 12px;
+    padding: 6px 10px;
+    border-radius: 4px;
+    border: 1px solid rgba(255, 255, 255, 0.95);
+}
+
+.submission-body {
+    padding: 16px 16px 18px;
+}
+
+.meta-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    margin-bottom: 8px;
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 13px;
+}
+.meta-item i {
+    margin-right: 6px;
+    opacity: 0.9;
+}
+.dot {
+    margin: 0 6px;
+    opacity: 0.75;
+}
+
+.submission-title {
+    color: #fff;
+    font-size: 20px;
+    font-weight: 800;
+    letter-spacing: -0.01em;
+    margin: 0 0 6px;
+}
+
+.votes-text {
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 13px;
+    margin-bottom: 14px;
+}
+
+/* Watch button */
+.watch-pill {
+    border-radius: 999px;
+    padding: 12px 16px;
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.16);
+    color: rgba(255, 255, 255, 0.88);
+    font-weight: 700;
+}
+.watch-pill:hover {
+    background: #000;
+    border-color: #000;
+    color: #fff;
+}
+
+/* Pagination */
+.sub-pagination {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.page-btn {
+    width: 34px;
+    height: 34px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 4px;
+    text-decoration: none;
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    color: rgba(255, 255, 255, 0.8);
+    font-weight: 700;
+    font-size: 13px;
+}
+.page-btn:hover {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: rgba(255, 255, 255, 0.18);
+    color: #fff;
+}
+.page-btn.active {
+    background: rgba(255, 255, 255, 0.92);
+    color: #111;
+    border-color: rgba(255, 255, 255, 0.95);
+}
+.page-btn.disabled {
+    opacity: 0.35;
+    pointer-events: none;
+}
+.page-dots {
+    color: rgba(255, 255, 255, 0.6);
+    padding: 0 4px;
+}
+
+/* ===== Submissions Header + Filters ===== */
+.submissions-head {
+    padding-top: 18px;
+}
+
+.submissions-title {
+    font-size: 44px;
+    font-weight: 800;
+    color: #fff;
+    letter-spacing: -0.02em;
+}
+
+/* filters wrapper */
+.submissions-filters {
+    align-items: center;
+}
+
+/* Figma style select */
+.filter-select {
+    width: 170px; /* Figma jaisa size */
+    height: 44px;
+    padding: 10px 44px 10px 18px;
+    border-radius: 10px;
+
+    background: rgba(255, 255, 255, 0.07);
+    border: 1px solid rgba(255, 255, 255, 0.18);
+
+    color: rgba(255, 255, 255, 0.92);
+    font-weight: 600;
+    font-size: 14px;
+
+    box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.18);
+    backdrop-filter: blur(10px);
+
+    /* remove default */
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+
+    /* chevron icon */
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='18' height='18' viewBox='0 0 24 24' fill='none'%3E%3Cpath d='M7 10l5 5 5-5' stroke='rgba(255,255,255,0.9)' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 16px center;
+    background-size: 18px;
+}
+
+.filter-select option {
+    color: #111; /* dropdown list readable */
+}
+
+/* hover */
+.filter-select:hover {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: rgba(255, 255, 255, 0.28);
+}
+
+/* focus */
+.filter-select:focus {
+    outline: none;
+    box-shadow: 0 0 0 4px rgba(245, 178, 42, 0.18),
+        inset 0 0 0 1px rgba(0, 0, 0, 0.2);
+    border-color: rgba(245, 178, 42, 0.55);
+}
+
+/* make it fit on small screens */
+@media (max-width: 991px) {
+    .submissions-title {
+        font-size: 34px;
+    }
+    .filter-select {
+        width: 160px;
+    }
+}
+
+@media (max-width: 576px) {
+    .filter-select {
+        width: 100%;
+    }
+}
+
+/* =========================
+   JUDGES TAB
+========================= */
+
+.judge-card {
+    position: relative;
+    border-radius: 16px;
+    padding: 12px;
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    backdrop-filter: blur(12px);
+    box-shadow: 0 18px 55px rgba(0, 0, 0, 0.35),
+        inset 0 0 0 1px rgba(255, 255, 255, 0.06);
+    overflow: hidden;
+}
+
+/* “white glow / inner shadow” look */
+.judge-card::before {
+    content: "";
+    position: absolute;
+    inset: 10px;
+    border-radius: 14px;
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.1),
+        inset 0 0 35px rgba(255, 255, 255, 0.1);
+    pointer-events: none;
+}
+
+.judge-media {
+    position: relative;
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+.judge-media img {
+    width: 100%;
+    height: 140px;
+    object-fit: cover;
+    display: block;
+}
+
+/* “15+ Years” pill */
+.judge-exp {
+    position: absolute;
+    right: 12px;
+    bottom: 12px;
+    padding: 6px 10px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 700;
+    color: rgba(255, 255, 255, 0.85);
+    background: rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.16);
+    backdrop-filter: blur(8px);
+}
+
+/* Round avatar that overlaps image + body */
+.judge-avatar {
+    position: absolute;
+    left: 16px;
+    bottom: -22px;
+    width: 54px;
+    height: 54px;
+    border-radius: 999px;
+    overflow: hidden;
+    background: #fff;
+    border: 3px solid rgba(255, 255, 255, 0.9);
+    box-shadow: 0 10px 24px rgba(0, 0, 0, 0.35);
+}
+
+.judge-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.judge-body {
+    padding: 38px 10px 10px; /* top padding to make room for avatar overlap */
+}
+
+.judge-name {
+    color: #fff;
+    font-weight: 800;
+    margin: 0 0 6px;
+    font-size: 18px;
+}
+
+.judge-loc {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 13px;
+    margin-bottom: 10px;
+}
+
+.judge-loc i {
+    opacity: 0.9;
+}
+
+.judge-tag {
+    display: inline-block;
+    padding: 6px 10px;
+    border-radius: 999px;
+    font-size: 12px;
+    color: rgba(255, 255, 255, 0.85);
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    margin-bottom: 12px;
+}
+
+.judge-btn {
+    border-radius: 999px;
+    padding: 12px 14px;
+    font-weight: 700;
+    color: rgba(255, 255, 255, 0.9);
+    background: rgba(0, 0, 0, 0.18);
+    border: 1px solid rgba(255, 255, 255, 0.16);
+    backdrop-filter: blur(10px);
+}
+
+.judge-btn:hover {
+    color: #fff;
+    background: rgba(0, 0, 0, 0.28);
+    border-color: rgba(255, 255, 255, 0.22);
+}
+
+/* =========================
+   FINAL SCORE STRIP
+   (similar feel to .prize-strip) 
+========================= */
+.final-strip {
+    position: relative;
+    border-radius: 14px;
+    padding: 26px;
+    background: linear-gradient(
+        90deg,
+        rgba(10, 7, 23, 0.35),
+        rgba(10, 7, 23, 0.75)
+    );
+    border: 1px solid rgba(255, 255, 255, 0.16);
+    overflow: hidden;
+    box-shadow: 0 18px 55px rgba(0, 0, 0, 0.35);
+}
+
+.final-strip::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: url("../images/wave.png") no-repeat center;
+    background-size: 820px auto;
+    opacity: 0.2;
+    pointer-events: none;
+}
+
+.final-title {
+    font-size: 42px;
+    font-weight: 900;
+    color: #fff;
+    line-height: 1.05;
+}
+
+.final-meta {
+    margin-top: 8px;
+    color: rgba(255, 255, 255, 0.75);
+    font-size: 16px;
+}
+
+@media (max-width: 991px) {
+    .judge-media img {
+        height: 150px;
+    }
+    .final-title {
+        font-size: 34px;
+    }
+}
+
 /* ===== Artists Dropdown (Figma style) ===== */
 
 .artists-dd .dropdown-toggle::after {
@@ -2158,6 +2612,9 @@ body {
     border: 1px solid rgba(255, 255, 255, 0.18);
     backdrop-filter: blur(10px);
     gap: 8px;
+    box-shadow: inset 0 0 25px rgba(255, 255, 255, 0.22),
+        inset 0 0 60px rgba(255, 255, 255, 0.08),
+        0 20px 45px rgba(0, 0, 0, 0.45);
 }
 .comp-tabs .nav-link {
     border-radius: 999px;
