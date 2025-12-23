@@ -28,6 +28,7 @@ Route::view('/competitions', 'user-side.competitions.index')->name('competitios.
 Route::view('/competitions/show', 'user-side.competitions.show')->name('competitios.show');
 Route::view('/competitions/profile', 'user-side.competitions.profile')->name('competitios.profile');
 Route::view('/competitions/details', 'user-side.competitions.submission-details.index')->name('competitios.submission-detsils.index');
+Route::view('/competitions/upcoming-competition-details', 'user-side.competitions.upcoming-competition-details')->name('competitios.upcoming-competition-details');
 Route::view('/artists/djs', 'user-side.artists.djs')->name('artists.djs');
 Route::view('/judges/show', 'user-side.judges.show')->name('judges.show');
 

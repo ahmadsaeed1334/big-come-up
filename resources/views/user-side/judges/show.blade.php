@@ -15,39 +15,50 @@
     </section>
 
     {{-- MAIN WRAP --}}
-    <section class="judge-wrap">
+    <section class="judge-profile-section">
         <div class="container">
             <div class="row g-4 align-items-start">
 
                 {{-- LEFT: profile card --}}
-                <div class="col-lg-4">
-                    <div class="judge-card">
-                        <div class="judge-avatar">
-                            <img src="{{ asset('assets/images/judge-avatar.jpg') }}" alt="Judge">
+                <div class="col-lg-3">
+                    <div class="judge-profile-card">
+
+                        <!-- Avatar -->
+                        <div class="judge-profile-avatar">
+                            <img src="{{ asset('assets/images/judge-avatar.jpg') }}" alt="DJ Spectra">
                         </div>
 
-                        <h2 class="judge-name">DJ Spectra- Judge</h2>
-                        <div class="judge-loc">
+                        <!-- Name -->
+                        <h2 class="judge-profile-name">
+                            DJ Spectra – Judge
+                        </h2>
+
+                        <!-- Location -->
+                        <p class="judge-profile-location">
                             <i class="bi bi-geo-alt"></i>
-                            <span>London,United Kingdom</span>
-                        </div>
-
-                        <hr class="judge-sep">
-
-                        <p class="judge-bio">
-                            With over 15 years of experience in the electronic music scene, she brings deep expertise in
-                            live performance evaluation, transitions, and energy control.
+                            London, United Kingdom
                         </p>
 
-                        <div class="judge-tags">
-                            <span class="chip">15+ Years of Experience</span>
-                            <span class="chip">EDM Festival Headliner &amp; Competition Judge</span>
+                        <hr class="judge-profile-divider">
+
+                        <!-- Bio -->
+                        <p class="judge-profile-bio">
+                            With over 15 years of experience in the electronic music scene,
+                            she brings deep expertise in live performance evaluation,
+                            transitions, and energy control.
+                        </p>
+
+                        <!-- Tags -->
+                        <div class="judge-profile-tags">
+                            <span class="judge-tag">15+ Years of Experience</span>
+                            <span class="judge-tag">EDM Festival Headliner & Competition Judge</span>
                         </div>
+
                     </div>
                 </div>
 
                 {{-- RIGHT: dotted dark panel --}}
-                <div class="col-lg-8">
+                <div class="col-lg-9">
                     <div class="judge-panel">
 
                         <div class="row g-3">

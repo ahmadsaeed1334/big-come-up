@@ -38,7 +38,7 @@
 ============================= --}}
     <section class="profile-content">
         <div class="container">
-            <div class="row g-4">
+            <div class="row g-4 ">
 
                 {{-- LEFT SIDEBAR --}}
                 <div class="col-lg-3">
@@ -97,7 +97,7 @@
                     {{-- TAB CONTENTS --}}
 
                     {{-- ALL PERFORMANCES --}}
-                    <div class="tab-content active" id="tab-all">
+                    <div class="tab-content-profile  active" id="tab-all">
                         <div class="row g-4">
                             @for ($i = 1; $i <= 4; $i++)
                                 <div class="col-md-6">
@@ -115,7 +115,7 @@
                     </div>
 
                     {{-- CURRENT COMPETITION --}}
-                    <div class="tab-content" id="tab-current">
+                    <div class="tab-content-profile " id="tab-current">
                         <div class="row g-4">
                             <div class="col-md-12">
                                 <div class="performance-card">
@@ -131,7 +131,7 @@
                     </div>
 
                     {{-- ACHIEVEMENTS --}}
-                    <div class="tab-content" id="tab-achievements">
+                    <div class="tab-content-profile " id="tab-achievements">
 
                         <div class="achievements-box">
 
@@ -197,7 +197,7 @@
 
 
                     {{-- HISTORY --}}
-                    <div class="tab-content" id="tab-history">
+                    <div class="tab-content-profile " id="tab-history">
 
                         <div class="history-box">
 
@@ -266,11 +266,86 @@
         </div>
     </section>
 
+    {{-- =============================
+COMMENTS SECTION (NEW)
+============================= --}}
+    <section class="profile-comments-shell">
+        <div class="container">
+
+            <h2 class="comments-title text-center mb-4">
+                Comments
+            </h2>
+
+            {{-- WRITE COMMENT --}}
+            <div class="comment-input-glass mb-4">
+                <div class="comment-input-left">
+                    <i class="bi bi-camera"></i>
+                    <input type="text" placeholder="Write your reply..." />
+                </div>
+
+                <div class="comment-input-right">
+                    <i class="bi bi-filetype-gif"></i>
+                    <i class="bi bi-image"></i>
+                </div>
+            </div>
+
+            {{-- COMMENT ITEM --}}
+            <div class="comment-glass-card">
+                <div class="comment-header">
+                    <img src="{{ asset('assets/images/profile1.jpg') }}" alt="">
+                    <div>
+                        <strong>jake.travels_</strong>
+                        <span>5h ago</span>
+                    </div>
+                </div>
+
+                <p class="comment-text">
+                    seriously, that mid-afternoon crash is brutal. matcha = the hero we need 🙌
+                </p>
+                <hr class="comment-divider-profile">
+                <div class="comment-footer">
+                    <span class="reply-btn">Reply</span>
+
+                    <div class="likes-box">
+                        <span>4 Likes</span>
+                        <span class="emoji">👍</span>
+                        <span class="emoji">😂</span>
+                    </div>
+                </div>
+            </div>
+
+            {{-- COMMENT ITEM --}}
+            <div class="comment-glass-card">
+                <div class="comment-header">
+                    <img src="{{ asset('assets/images/profile1.jpg') }}" alt="">
+                    <div>
+                        <strong>jake.travels_</strong>
+                        <span>5h ago</span>
+                    </div>
+                </div>
+
+                <p class="comment-text">
+                    seriously, that mid-afternoon crash is brutal. matcha = the hero we need 🙌
+                </p>
+                <hr class="comment-divider-profile">
+                <div class="comment-footer">
+                    <span class="reply-btn">Reply</span>
+
+                    <div class="likes-box">
+                        <span>4 Likes</span>
+                        <span class="emoji">👍</span>
+                        <span class="emoji">😂</span>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
 
     <script>
         document.addEventListener("DOMContentLoaded", function() {
             const tabButtons = document.querySelectorAll(".tab-btn");
-            const tabContents = document.querySelectorAll(".tab-content");
+            const tabContents = document.querySelectorAll(".tab-content-profile ");
 
             tabButtons.forEach(btn => {
                 btn.addEventListener("click", () => {
