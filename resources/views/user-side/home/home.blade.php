@@ -9,23 +9,22 @@
         {{-- HERO --}}
         <section class="hero">
             <div class="container">
-                <div class="kicker">THE BIG COME UP</div>
+                <div class="kicker">{{ $hero->subtitle }}</div>
 
-                <h1>The World’s Biggest DJ, Artist &amp;<br class="d-none d-md-block"> Music Competition Platform</h1>
+                <h1>{{ $hero->title }}</h1>
 
                 <p>
-                    Complete globally discover new talent and be discovered, vote for your favorites, chat and connect,
-                    sell your music, beats, and merchandise. Even members win cash. Rise to the top with AI powered
-                    scoring and fair competition.
+                    {!! $hero->description !!}
+
                 </p>
 
                 <div class="hero-actions d-flex justify-content-center gap-3 flex-wrap mt-4">
-                    <a href="{{ route('register') }}" class="btn btn-warning hero-btn hero-btn-primary">
-                        Sign Up Now <span class="arrow">→</span>
+                    <a href="{{ $hero->primary_btn_link }}" class="btn btn-warning hero-btn hero-btn-primary">
+                        {{ $hero->primary_btn_text }}<span class="arrow">→</span>
                     </a>
 
-                    <a href="#" class="btn hero-btn hero-btn-outline">
-                        Watch Videos <span class="arrow">→</span>
+                    <a href=" {{ $hero->secondary_btn_link }}" class="btn hero-btn hero-btn-outline">
+                        {{ $hero->secondary_btn_text }} <span class="arrow">→</span>
                     </a>
                 </div>
 

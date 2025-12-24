@@ -134,7 +134,7 @@
         </li>
 
         {{-- Competitions Module --}}
-        <li class="nav-item">
+
         <li class="nav-item">
             <a class="nav-link {{ is_active_parent('admin.competitions') }}" data-bs-toggle="collapse"
                 data-bs-target="#collapseCompetitions" role="button" aria-expanded="false"
@@ -153,6 +153,36 @@
                     <li class="nav-item">
                         <a class="nav-link" href="{{ route('admin.competitions.create') }}">
                             Create Competition
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link {{ is_active_parent('admin.judges') }}" data-bs-toggle="collapse"
+                data-bs-target="#collapseJudges" role="button" aria-expanded="false" aria-controls="collapseJudges">
+                <i class="bi bi-person-badge me-2"></i> Judges
+            </a>
+
+            <div class="collapse {{ is_active_prefix('admin.judges') }}" id="collapseJudges">
+                <ul class="nav flex-column mt-1">
+                    <li class="nav-item">
+                        <a class="nav-link {{ is_active_route('admin.judges.index') }}"
+                            href="{{ route('admin.judges.index') }}">
+                            All Judges
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link {{ is_active_route('admin.judge-tags.index') }}"
+                            href="{{ route('admin.judge-tags.index') }}">
+                            Judge Tags
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {{ is_active_route('admin.judges.create') }}"
+                            href="{{ route('admin.judges.create') }}">
+                            Create Judge
                         </a>
                     </li>
                 </ul>

@@ -18,7 +18,9 @@ body {
     color: #111;
     overflow-x: hidden;
 }
-
+p {
+    color: #6d6d6d;
+}
 .hero-shell {
     position: relative;
     isolation: isolate;
@@ -2141,7 +2143,7 @@ body {
     padding: 10px 18px;
     border-radius: 12px;
     font-weight: 600;
-    color: #111;
+    color: #111 !important;
     background: transparent;
 }
 .filter-btn:hover {

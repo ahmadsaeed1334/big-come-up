@@ -160,7 +160,7 @@
                     <div class="prize-strip d-flex align-items-center justify-content-between flex-wrap gap-3 mb-4">
                         <div>
                             <h4 class="mb-1 text-white fw-bold">Prize Pool</h4>
-                            <div class="text-white-100 fw-semibold">$10,000 Total Prize Money 💰</div>
+                            <div class="text-white fw-semibold">$10,000 Total Prize Money 💰</div>
                         </div>
 
                         <a href="#" class="btn btn-cta-amber btn-sm-pill">

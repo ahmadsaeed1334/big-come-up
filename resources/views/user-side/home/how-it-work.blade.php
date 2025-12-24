@@ -4,20 +4,21 @@
 
         <div class="row g-4 g-lg-0 how-row align-items-stretch">
             {{-- Card 1 --}}
-            <div class="col-12 col-lg-4 how-col">
-                <div class="how-card text-center h-100">
-                    <div class="how-badge mx-auto mb-4">01</div>
+            @foreach ($steps as $step)
+                <div class="col-12 col-lg-4 how-col">
+                    <div class="how-card text-center h-100">
+                        <div class="how-badge mx-auto mb-4"> {{ sprintf('%02d', $step->step_number) }}</div>
 
-                    <h5 class="how-heading mb-2">Submit Your Performance</h5>
-                    <p class="how-text mb-0">
-                        Upload your YouTube, TikTok, or Instagram link. Our AI extracts your BPM, mood, and genre
-                        automatically.
-                    </p>
+                        <h5 class="how-heading mb-2">{{ $step->title }}</h5>
+                        <p class="how-text mb-0">
+                            {!! $step->description !!}
+                        </p>
+                    </div>
                 </div>
-            </div>
+            @endforeach
 
             {{-- Card 2 --}}
-            <div class="col-12 col-lg-4 how-col how-divider">
+            {{-- <div class="col-12 col-lg-4 how-col how-divider">
                 <div class="how-card text-center h-100">
                     <div class="how-badge mx-auto mb-4">02</div>
 
@@ -27,10 +28,10 @@
                         assistance.
                     </p>
                 </div>
-            </div>
+            </div> --}}
 
             {{-- Card 3 --}}
-            <div class="col-12 col-lg-4 how-col how-divider">
+            {{-- <div class="col-12 col-lg-4 how-col how-divider">
                 <div class="how-card text-center h-100">
                     <div class="how-badge mx-auto mb-4">03</div>
 
@@ -40,7 +41,7 @@
                         outreach.
                     </p>
                 </div>
-            </div>
+            </div> --}}
         </div>
 
         <div class="text-center mt-5">

@@ -6,6 +6,10 @@ use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\CompetitionController;
 use App\Http\Controllers\Admin\CouponController;
 use App\Http\Controllers\Admin\EntryController;
+use App\Http\Controllers\Admin\HeroSectionController;
+use App\Http\Controllers\Admin\HowItWorksController;
+use App\Http\Controllers\Admin\JudgeController;
+use App\Http\Controllers\Admin\JudgeTagController;
 use App\Http\Controllers\Admin\OrderController;
 use App\Http\Controllers\Admin\PaymentController;
 use App\Http\Controllers\Admin\PermissionController;
@@ -18,12 +22,14 @@ use App\Http\Controllers\Admin\VoteController;
 use App\Http\Controllers\Admin\WinnerPayoutController;
 use App\Http\Controllers\Affiliate\DashboardController;
 use App\Http\Controllers\Affiliate\TrackController;
+use App\Http\Controllers\UserSide\HomeController;
 use Illuminate\Support\Facades\Route;
 
 // Route::get('/', function () {
 //     return view('welcome');
-// });
-Route::view('/', 'user-side.home.home')->name('user.home');
+// });  
+Route::get('/', [HomeController::class, 'index'])->name('home.index');
+// Route::view('/', 'user-side.home.home')->name('user.home');
 Route::view('/competitions', 'user-side.competitions.index')->name('competitios.index');
 Route::view('/competitions/show', 'user-side.competitions.show')->name('competitios.show');
 Route::view('/competitions/profile', 'user-side.competitions.profile')->name('competitios.profile');
@@ -141,9 +147,43 @@ Route::middleware(['auth'])
         Route::resource('affiliate-payouts', AffiliatePayoutController::class);
     });
 Route::get('/ref/{code}', TrackController::class)->name('affiliate.track');
-
+Route::prefix('admin')
+    ->middleware(['auth'])
+    ->name('admin.')
+    ->group(function () {
+        Route::get('/hero-section', [HeroSectionController::class, 'edit'])->name('hero.edit');
+        Route::put('/hero-section', [HeroSectionController::class, 'update'])->name('hero.update');
+    });
 Route::middleware(['auth'])->prefix('affiliate')->name('affiliate.')->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::get('/referrals', [DashboardController::class, 'referrals'])->name('referrals');
     Route::get('/payouts', [DashboardController::class, 'payouts'])->name('payouts');
 });
+
+
+Route::prefix('admin')
+    ->middleware(['auth'])
+    ->name('admin.')
+    ->group(function () {
+        Route::get('/how-it-works', [HowItWorksController::class, 'index'])->name('how.index');
+        Route::post('/how-it-works', [HowItWorksController::class, 'store'])->name('how.store');
+        Route::put('/how-it-works/{step}', [HowItWorksController::class, 'update'])->name('how.update');
+        Route::delete('/how-it-works/{step}', [HowItWorksController::class, 'destroy'])->name('how.destroy');
+    });
+
+// routes/web.php
+Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () {
+    // Judges CRUD
+    Route::resource('judges', JudgeController::class);
+    // Route::get('/judges/{judge}', [JudgeController::class, 'show'])->name('judges.show');
+    // Tags Management
+    Route::prefix('judge-tags')->name('judge-tags.')->group(function () {
+        Route::get('/', [JudgeTagController::class, 'index'])->name('index');
+        Route::post('/', [JudgeTagController::class, 'store'])->name('store');
+        Route::put('/{judgeTag}', [JudgeTagController::class, 'update'])->name('update');
+        Route::delete('/{judgeTag}', [JudgeTagController::class, 'destroy'])->name('destroy');
+    });
+});
+
+// Public judge profile
+Route::get('/judge/{id}', [JudgeController::class, 'show'])->name('judge.profile');
