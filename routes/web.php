@@ -37,6 +37,11 @@ Route::view('/competitions/details', 'user-side.competitions.submission-details.
 Route::view('/competitions/upcoming-competition-details', 'user-side.competitions.upcoming-competition-details')->name('competitios.upcoming-competition-details');
 Route::view('/artists/djs', 'user-side.artists.djs')->name('artists.djs');
 Route::view('/judges/show', 'user-side.judges.show')->name('judges.show');
+Route::view('/community/on-blast', 'user-side.community.on-blast')->name('community.on-blast');
+Route::view('/community/on-blast-submission', 'user-side.community.on-blast-submission')->name('community.on-blast-submission');
+Route::view('/community/on-blast/view-story', 'user-side.community.view-story')->name('community.view-story');
+Route::view('/shop', 'user-side.shop.index')->name('shop.index');
+Route::view('/shop/single-product', 'user-side.shop.single-product')->name('shop.single-product');
 
 Route::middleware(['auth', 'verified'])->get('/dashboard', function () {
     return view('dashboard');

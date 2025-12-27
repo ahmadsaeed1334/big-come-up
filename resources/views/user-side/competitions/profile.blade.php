@@ -88,10 +88,10 @@
 
                     {{-- TABS --}}
                     <div class="profile-tabs mb-4">
-                        <button class="tab-btn active" data-tab="all">All Performances</button>
-                        <button class="tab-btn" data-tab="current">Current Competition</button>
-                        <button class="tab-btn" data-tab="achievements">Achievements</button>
-                        <button class="tab-btn" data-tab="history">History</button>
+                        <button class="profile-tab-btn active" data-tab="all">All Performances</button>
+                        <button class="profile-tab-btn" data-tab="current">Current Competition</button>
+                        <button class="profile-tab-btn" data-tab="achievements">Achievements</button>
+                        <button class="profile-tab-btn" data-tab="history">History</button>
                     </div>
 
                     {{-- TAB CONTENTS --}}
@@ -344,7 +344,7 @@ COMMENTS SECTION (NEW)
 
     <script>
         document.addEventListener("DOMContentLoaded", function() {
-            const tabButtons = document.querySelectorAll(".tab-btn");
+            const tabButtons = document.querySelectorAll(".profile-tab-btn");
             const tabContents = document.querySelectorAll(".tab-content-profile ");
 
             tabButtons.forEach(btn => {
