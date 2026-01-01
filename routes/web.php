@@ -24,6 +24,14 @@ use App\Http\Controllers\Affiliate\DashboardController;
 use App\Http\Controllers\Affiliate\TrackController;
 use App\Http\Controllers\UserSide\HomeController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Admin\{
+    ArtistController,
+    ArtistsCategoryController,
+    ArtistsProductController,
+    ColorController,
+    ProductReviewController,
+    SizeController
+};
 
 // Route::get('/', function () {
 //     return view('welcome');
@@ -42,6 +50,11 @@ Route::view('/community/on-blast-submission', 'user-side.community.on-blast-subm
 Route::view('/community/on-blast/view-story', 'user-side.community.view-story')->name('community.view-story');
 Route::view('/shop', 'user-side.shop.index')->name('shop.index');
 Route::view('/shop/single-product', 'user-side.shop.single-product')->name('shop.single-product');
+Route::view('/shop/single-product-content', 'user-side.shop.single-product-content')->name('shop.single-product-content');
+Route::view('/sweep-stakes', 'user-side.sweep-stakes.index')->name('sweep-stakes.index');
+Route::view('/radio', 'user-side.radio.index')->name('radio.index');
+Route::view('/card', 'user-side.card.index')->name('card.index');
+Route::view('/checkout', 'user-side.card.checkout')->name('card.checkout');
 
 Route::middleware(['auth', 'verified'])->get('/dashboard', function () {
     return view('dashboard');
@@ -190,5 +203,43 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
     });
 });
 
+Route::prefix('admin')->name('admin.')->middleware(['auth', 'verified'])->group(function () {
+    // Artists Products with media library support
+    Route::get('artists-products', [ArtistsProductController::class, 'index'])->name('artists-products.index');
+    Route::get('artists-products/create', [ArtistsProductController::class, 'create'])->name('artists-products.create');
+    Route::post('artists-products', [ArtistsProductController::class, 'store'])->name('artists-products.store');
+    Route::get('artists-products/{artists_product}/edit', [ArtistsProductController::class, 'edit'])->name('artists-products.edit');
+    Route::put('artists-products/{artists_product}', [ArtistsProductController::class, 'update'])->name('artists-products.update');
+    Route::delete('artists-products/{artists_product}', [ArtistsProductController::class, 'destroy'])->name('artists-products.destroy');
+
+    // Media library specific routes
+    Route::delete('artists-products/{artists_product}/remove-image', [ArtistsProductController::class, 'removeImage'])->name('artists-products.removeImage');
+    Route::put('artists-products/{artists_product}/reorder-images', [ArtistsProductController::class, 'reorderImages'])->name('artists-products.reorderImages');
+
+    // Artist Categories
+    Route::get('artists-categories', [ArtistsCategoryController::class, 'index'])->name('artists-categories.index');
+    Route::post('artists-categories', [ArtistsCategoryController::class, 'store'])->name('artists-categories.store');
+    Route::put('artists-categories/{artists_category}', [ArtistsCategoryController::class, 'update'])->name('artists-categories.update');
+    Route::delete('artists-categories/{artists_category}', [ArtistsCategoryController::class, 'destroy'])->name('artists-categories.destroy');
+
+    // Artists
+    Route::get('artists', [ArtistController::class, 'index'])->name('artists.index');
+    Route::post('artists', [ArtistController::class, 'store'])->name('artists.store');
+    Route::put('artists/{artist}', [ArtistController::class, 'update'])->name('artists.update');
+    Route::delete('artists/{artist}', [ArtistController::class, 'destroy'])->name('artists.destroy');
+
+    // Product Colors
+    Route::resource('colors', ColorController::class);
+
+    // Product Sizes
+    Route::resource('sizes', SizeController::class);
+
+
+    // Product Reviews
+    Route::get('product-reviews', [ProductReviewController::class, 'index'])->name('product-reviews.index');
+    Route::post('products/{product}/reviews', [ProductReviewController::class, 'store'])->name('products.reviews.store');
+    Route::put('product-reviews/{product_review}', [ProductReviewController::class, 'update'])->name('product-reviews.update');
+    Route::delete('product-reviews/{product_review}', [ProductReviewController::class, 'destroy'])->name('product-reviews.destroy');
+});
 // Public judge profile
 Route::get('/judge/{id}', [JudgeController::class, 'show'])->name('judge.profile');
