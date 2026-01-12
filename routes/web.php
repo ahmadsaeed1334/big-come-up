@@ -32,6 +32,8 @@ use App\Http\Controllers\Admin\{
     ProductReviewController,
     SizeController
 };
+use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\Auth\RegisterController;
 
 // Route::get('/', function () {
 //     return view('welcome');
@@ -55,14 +57,25 @@ Route::view('/sweep-stakes', 'user-side.sweep-stakes.index')->name('sweep-stakes
 Route::view('/radio', 'user-side.radio.index')->name('radio.index');
 Route::view('/card', 'user-side.card.index')->name('card.index');
 Route::view('/checkout', 'user-side.card.checkout')->name('card.checkout');
+Route::view('/table', 'admin.partials.table')->name('partials.table');
+Route::view('/my-profile', 'user-side.my-profile.index')->name('my-profile.index');
 
-Route::middleware(['auth', 'verified'])->get('/dashboard', function () {
+Route::middleware(['auth', 'verified'])->get('/admin/dashboard', function () {
     return view('dashboard');
-})->name('dashboard');
+})->name('admin.dashboard');
 
 Route::middleware(['auth', 'verified'])->get('/home', function () {
     return redirect()->route('dashboard');
 })->name('home');
+
+
+Route::middleware('guest')->group(function () {
+    Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
+    Route::post('/login', [LoginController::class, 'login']);
+
+    Route::get('/register', [RegisterController::class, 'showRegistrationForm'])->name('register');
+    Route::post('/register', [RegisterController::class, 'register']);
+});
 
 Route::middleware(['auth'])
     ->prefix('admin')
@@ -193,6 +206,7 @@ Route::prefix('admin')
 Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () {
     // Judges CRUD
     Route::resource('judges', JudgeController::class);
+    Route::post('judges-tag', [JudgeController::class, 'storetag'])->name('judges-tag.store');
     // Route::get('/judges/{judge}', [JudgeController::class, 'show'])->name('judges.show');
     // Tags Management
     Route::prefix('judge-tags')->name('judge-tags.')->group(function () {
@@ -211,10 +225,14 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'verified'])->group(
     Route::get('artists-products/{artists_product}/edit', [ArtistsProductController::class, 'edit'])->name('artists-products.edit');
     Route::put('artists-products/{artists_product}', [ArtistsProductController::class, 'update'])->name('artists-products.update');
     Route::delete('artists-products/{artists_product}', [ArtistsProductController::class, 'destroy'])->name('artists-products.destroy');
-
+    Route::get('artists-products/{artistsProduct}/details', [ArtistsProductController::class, 'show'])
+        ->name('artists-products.show');
     // Media library specific routes
     Route::delete('artists-products/{artists_product}/remove-image', [ArtistsProductController::class, 'removeImage'])->name('artists-products.removeImage');
     Route::put('artists-products/{artists_product}/reorder-images', [ArtistsProductController::class, 'reorderImages'])->name('artists-products.reorderImages');
+    // Artist Colors store route
+    Route::post('artists-products/color-store', [ArtistsProductController::class, 'storeColor'])->name('artists-products.colors.store');
+    Route::post('artists-products/size-store', [ArtistsProductController::class, 'storeSize'])->name('artists-products.sizes.store');
 
     // Artist Categories
     Route::get('artists-categories', [ArtistsCategoryController::class, 'index'])->name('artists-categories.index');

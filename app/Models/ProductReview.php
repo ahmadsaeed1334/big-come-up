@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class ProductReview extends Model
 {
@@ -14,8 +15,11 @@ class ProductReview extends Model
         'review'
     ];
 
-    public function product()
+    public function product(): BelongsTo
     {
-        return $this->belongsTo(ArtistsProduct::class);
+        return $this->belongsTo(ArtistsProduct::class, 'artists_product_id')->withDefault([
+            'name' => 'Deleted Product',
+            'images' => collect([]) // Empty collection
+        ]);
     }
 }

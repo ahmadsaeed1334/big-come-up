@@ -17,15 +17,66 @@ use Illuminate\Validation\Rule;
 
 class ArtistsProductController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
         $title = "Artists Products";
-        $products = ArtistsProduct::with(['category', 'artist', 'colors', 'sizes', 'media'])
+
+        $query = ArtistsProduct::with([
+            'category',
+            'artist',
+            'colors',
+            'sizes',
+            'media'
+        ]);
+
+        // Search
+        if ($request->filled('q')) {
+            $search = $request->q;
+            $query->where(function ($q) use ($search) {
+                $q->where('title', 'like', "%{$search}%")
+                    ->orWhere('slug', 'like', "%{$search}%")
+                    ->orWhere('description', 'like', "%{$search}%");
+            });
+        }
+
+        // Filters
+        if ($request->filled('artists_category_id')) {
+            $query->where('artists_category_id', $request->artists_category_id);
+        }
+
+        if ($request->filled('artist_id')) {
+            $query->where('artist_id', $request->artist_id);
+        }
+
+        // ✅ PAGINATION (IMPORTANT PART)
+        $products = $query
             ->orderBy('created_at', 'desc')
+            ->paginate(10)
+            ->withQueryString();
+
+        // Stats
+        $totalProducts = ArtistsProduct::count();
+        $activeProducts = ArtistsProduct::where('is_active', true)->count();
+        $featuredProducts = ArtistsProduct::where('is_featured', true)->count();
+
+        $recentProducts = ArtistsProduct::with(['category', 'artist'])
+            ->orderBy('created_at', 'desc')
+            ->limit(5)
             ->get();
+
         $artists = Artist::orderBy('name')->get();
         $categories = ArtistsCategory::orderBy('name')->get();
-        return view('admin.artists-products.index', compact('products', 'title', 'categories', 'artists'));
+
+        return view('admin.artists-products.index', compact(
+            'products',
+            'title',
+            'categories',
+            'artists',
+            'totalProducts',
+            'activeProducts',
+            'featuredProducts',
+            'recentProducts'
+        ));
     }
 
     public function create()
@@ -481,11 +532,8 @@ class ArtistsProductController extends Controller
                 'media_id' => $request->media_id,
                 'product_id' => $artistsProduct->id
             ]);
-
-            return response()->json([
-                'success' => true,
-                'message' => 'Image removed successfully'
-            ]);
+            toast_updated('Artist Product');
+            return redirect()->route('admin.artists-products.index');
         } catch (\Exception $e) {
             Log::error('Error removing image:', [
                 'error' => $e->getMessage(),
@@ -517,5 +565,126 @@ class ArtistsProductController extends Controller
         }
 
         return response()->json(['success' => true]);
+    }
+
+    public function storeColor(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'name' => ['required', 'string', 'max:100', 'unique:colors,name'],
+            'code' => ['nullable', 'string', 'max:7', 'regex:/^#?([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/']
+        ]);
+
+        // ❌ validation failed
+        if ($validator->fails()) {
+            toast_error($validator->errors()->first());
+            return back();
+        }
+
+        // ✅ validated data
+        $data = $validator->validated();
+
+        // ensure # prefix in color code
+        if (!empty($data['code']) && !str_starts_with($data['code'], '#')) {
+            $data['code'] = '#' . $data['code'];
+        }
+
+        // check if color already exists (extra safety)
+        $color = Color::where('name', $data['name'])->first();
+
+        if (!$color) {
+            $color = Color::create([
+                'name' => $data['name'],
+                'code' => $data['code'] ?? null,
+                'is_active' => $request->has('is_active') ? 1 : 0
+            ]);
+        }
+
+        // attach to product if coming from product page
+        if ($request->filled('product_id')) {
+            $product = \App\Models\ArtistsProduct::find($request->product_id);
+            if ($product && !$product->colors()->where('colors.id', $color->id)->exists()) {
+                $product->colors()->attach($color->id);
+            }
+        }
+
+        // AJAX response
+        if ($request->expectsJson() || $request->ajax()) {
+            return response()->json([
+                'success' => true,
+                'message' => 'Color added successfully!',
+                'color' => [
+                    'id' => $color->id,
+                    'name' => $color->name,
+                    'code' => $color->code
+                ]
+            ]);
+        }
+
+        toast_created('Color');
+        return back();
+    }
+    public function storeSize(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'name' => ['required', 'string', 'max:100', 'unique:sizes,name'],
+            'code' => ['required', 'string', 'max:10', 'unique:sizes,code']
+        ]);
+
+        if ($validator->fails()) {
+            toast_error($validator->errors()->first());
+            return back();
+        }
+
+        // ✅ use validated data
+        $data = $validator->validated();
+
+        // ✅ check existing size properly
+        $size = Size::where('name', $data['name'])->first();
+
+        if (!$size) {
+            $size = Size::create($data);
+        }
+
+        // attach to product (optional)
+        if ($request->filled('product_id')) {
+            $product = \App\Models\ArtistsProduct::find($request->product_id);
+            if ($product && !$product->sizes()->where('sizes.id', $size->id)->exists()) {
+                $product->sizes()->attach($size->id);
+            }
+        }
+
+        // AJAX response
+        if ($request->expectsJson() || $request->ajax()) {
+            return response()->json([
+                'success' => true,
+                'message' => 'Size added successfully!',
+                'size' => $size
+            ]);
+        }
+
+        toast_created('Size');
+        return back();
+    }
+
+    public function storeSizdfe(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'name' => ['required', 'string', 'max:100', 'unique:sizes,name'],
+            'code' => ['required', 'string', 'max:10', 'unique:sizes,code']
+        ]);
+
+        if ($validator->fails()) {
+            toast_error($validator->errors()->first());
+            return back();
+        }
+
+        Size::create([
+            'name' => $request->name,
+            'code' => strtoupper($request->code),
+            'is_active' => $request->has('is_active') ? 1 : 0
+        ]);
+
+        toast_created('Size');
+        return back();
     }
 }

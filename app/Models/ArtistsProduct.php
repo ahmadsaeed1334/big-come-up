@@ -8,6 +8,7 @@ use Spatie\Sluggable\SlugOptions;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class ArtistsProduct extends Model implements HasMedia
 {
@@ -132,6 +133,30 @@ class ArtistsProduct extends Model implements HasMedia
         });
     }
 
+    /**
+     * Get images attribute for relationship
+     */
+    public function getImagesAttribute()
+    {
+        return $this->getMedia('product_images')->map(function ($media) {
+            return (object) [
+                'id' => $media->id,
+                'image_url' => $media->getUrl(),
+                'thumb_url' => $media->getUrl('thumb'),
+                'gallery_url' => $media->getUrl('gallery'),
+                'order_column' => $media->order_column
+            ];
+        });
+    }
+
+    /**
+     * Relationship for product images
+     */
+    public function images()
+    {
+        return $this->media()->where('collection_name', 'product_images');
+    }
+
     public function category()
     {
         return $this->belongsTo(ArtistsCategory::class, 'artists_category_id');
@@ -152,6 +177,7 @@ class ArtistsProduct extends Model implements HasMedia
     {
         return $this->belongsToMany(Size::class, 'artists_product_size');
     }
+
     public function reviews()
     {
         return $this->hasMany(ProductReview::class, 'artists_product_id');

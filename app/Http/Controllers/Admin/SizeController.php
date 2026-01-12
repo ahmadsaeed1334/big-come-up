@@ -6,67 +6,80 @@ use App\Http\Controllers\Controller;
 use App\Models\Size;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
+use Illuminate\Support\Facades\Validator;
 
 class SizeController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
         $title = "Sizes";
-        $sizes = Size::orderBy('code')->get();
-        return view('admin.sizes.index', compact('sizes', 'title'));
+        $search = $request->get('search');
+
+        $sizes = Size::withCount('products')
+            ->when($search, function ($query) use ($search) {
+                $query->where('name', 'like', "%{$search}%")
+                    ->orWhere('code', 'like', "%{$search}%");
+            })
+            ->orderBy('created_at', 'desc')
+            ->paginate(10)
+            ->withQueryString();
+
+
+        return view('admin.sizes.index', compact('sizes', 'title', 'search'));
     }
 
     public function store(Request $request)
     {
-        $data = $request->validate([
-            'name' => ['required', 'string', 'max:100'],
-            'code' => ['required', 'string', 'max:10']
+        $validator = Validator::make($request->all(), [
+            'name' => ['required', 'string', 'max:100', 'unique:sizes,name'],
+            'code' => ['required', 'string', 'max:10', 'unique:sizes,code']
         ]);
 
-        // Check if size already exists
-        $size = Size::where('code', $data['code'])->first();
-
-        if (!$size) {
-            $size = Size::create($data);
+        if ($validator->fails()) {
+            toast_error($validator->errors()->first());
+            return back();
         }
 
-        // If product_id is provided, attach size to product
-        if ($request->has('product_id') && $request->product_id) {
-            $product = \App\Models\ArtistsProduct::find($request->product_id);
-            if ($product && !$product->sizes()->where('sizes.id', $size->id)->exists()) {
-                $product->sizes()->attach($size->id);
-            }
-        }
-
-        // Check if request is AJAX
-        if ($request->expectsJson() || $request->ajax()) {
-            return response()->json([
-                'success' => true,
-                'message' => 'Size added successfully!',
-                'size' => $size
-            ]);
-        }
+        Size::create([
+            'name' => $request->name,
+            'code' => strtoupper($request->code),
+            'is_active' => $request->has('is_active') ? 1 : 0
+        ]);
 
         toast_created('Size');
-        return back()->with('success', 'Size added successfully!');
+        return redirect()->route('admin.sizes.index');
     }
+
     public function update(Request $request, Size $size)
     {
-        $data = $request->validate([
-            'name' => ['required', 'string', 'max:100'],
+        $validator = Validator::make($request->all(), [
+            'name' => [
+                'required',
+                'string',
+                'max:100',
+                Rule::unique('sizes', 'name')->ignore($size->id)
+            ],
             'code' => [
                 'required',
                 'string',
                 'max:10',
                 Rule::unique('sizes', 'code')->ignore($size->id)
             ],
-            'is_active' => ['boolean']
         ]);
 
-        $size->update($data);
+        if ($validator->fails()) {
+            toast_error($validator->errors()->first());
+            return back();
+        }
+
+        $size->update([
+            'name' => $request->name,
+            'code' => strtoupper($request->code),
+            'is_active' => $request->has('is_active') ? 1 : 0
+        ]);
 
         toast_updated('Size');
-        return back();
+        return redirect()->route('admin.sizes.index');
     }
 
     public function destroy(Size $size)
@@ -74,10 +87,10 @@ class SizeController extends Controller
         try {
             $size->delete();
             toast_deleted('Size');
+            return redirect()->route('admin.sizes.index');
         } catch (\Throwable $e) {
             toast_error('Unable to delete size. It may be assigned to products.');
+            return back();
         }
-
-        return back();
     }
 }

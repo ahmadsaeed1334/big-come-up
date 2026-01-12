@@ -5,85 +5,101 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Color;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\Rule;
+use Illuminate\Support\Facades\Validator;
 
 class ColorController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
         $title = "Colors";
-        $colors = Color::orderBy('name')->get();
-        return view('admin.colors.index', compact('colors', 'title'));
+        $search = $request->get('search');
+
+        $colors = Color::withCount('products')
+            ->when($search, function ($query) use ($search) {
+                $query->where('name', 'like', "%{$search}%")
+                    ->orWhere('code', 'like', "%{$search}%");
+            })
+            ->orderBy('created_at', 'desc')
+            ->paginate(10)
+            ->withQueryString();
+
+
+        return view('admin.colors.index', compact('colors', 'title', 'search'));
     }
+
 
     public function store(Request $request)
     {
-        $data = $request->validate([
-            'name' => ['required', 'string', 'max:100'],
-            'code' => ['nullable', 'string', 'max:7', 'regex:/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/']
+        $validator = Validator::make($request->all(), [
+            'name' => ['required', 'string', 'max:100', 'unique:colors,name'],
+            'code' => ['required', 'string', 'max:7', 'regex:/^#?([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/']
         ]);
 
-        // Check if color already exists
-        $color = Color::where('name', $data['name'])->first();
-
-        if (!$color) {
-            $color = Color::create($data);
+        if ($validator->fails()) {
+            toast_error($validator->errors()->first());
+            return back();
         }
 
-        // If product_id is provided, attach color to product
-        if ($request->has('product_id') && $request->product_id) {
-            $product = \App\Models\ArtistsProduct::find($request->product_id);
-            if ($product && !$product->colors()->where('colors.id', $color->id)->exists()) {
-                $product->colors()->attach($color->id);
-            }
+        $code = $request->code;
+        if (!str_starts_with($code, '#')) {
+            $code = '#' . $code;
         }
 
-        // Check if request is AJAX
-        if ($request->expectsJson() || $request->ajax()) {
-            return response()->json([
-                'success' => true,
-                'message' => 'Color added successfully!',
-                'color' => [
-                    'id' => $color->id,
-                    'name' => $color->name,
-                    'code' => $color->code
-                ]
-            ]);
-        }
+        Color::create([
+            'name' => $request->name,
+            'code' => $code,
+            'is_active' => $request->has('is_active') ? 1 : 0
+        ]);
 
-        toast_created('Color');
-        return back();
+        toast_created('Color'); // 👈 SAME TOAST AS UPDATE
+        return redirect()->route('admin.colors.index');
     }
-
 
     public function update(Request $request, Color $color)
     {
-        $data = $request->validate([
+        $validator = Validator::make($request->all(), [
             'name' => [
                 'required',
                 'string',
                 'max:100',
                 Rule::unique('colors', 'name')->ignore($color->id)
             ],
-            'code' => ['nullable', 'string', 'max:7', 'regex:/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/'],
-            'is_active' => ['boolean']
+            'code' => ['required', 'string', 'max:7', 'regex:/^#?([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/'],
         ]);
 
-        $color->update($data);
+        if ($validator->fails()) {
+            toast_error($validator->errors()->first());
+            return back();
+        }
 
-        toast_updated('Color');
-        return back();
+        $code = $request->code;
+        if (!str_starts_with($code, '#')) {
+            $code = '#' . $code;
+        }
+
+        $color->update([
+            'name' => $request->name,
+            'code' => $code,
+            'is_active' => $request->has('is_active') ? 1 : 0
+        ]);
+
+        toast_updated('Color'); // 👈 SAME TOP-RIGHT TOAST
+        return redirect()->route('admin.colors.index');
     }
+
 
     public function destroy(Color $color)
     {
         try {
             $color->delete();
+
             toast_deleted('Color');
+            return redirect()->route('admin.colors.index')->with('success', 'Color deleted successfully!');
         } catch (\Throwable $e) {
             toast_error('Unable to delete color. It may be assigned to products.');
+            return back()->with('error', 'Unable to delete color. It may be assigned to products.');
         }
-
-        return back();
     }
 }

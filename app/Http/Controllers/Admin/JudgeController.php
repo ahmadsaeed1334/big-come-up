@@ -17,7 +17,7 @@ class JudgeController extends Controller
     public function index(Request $request)
     {
         $title = "Judge";
-        $query = Judge::with('tags')->latest();
+        $query = Judge::with(['tags', 'credentials'])->latest();
 
         // Search functionality
         if ($request->has('search') && $request->search != '') {
@@ -32,7 +32,24 @@ class JudgeController extends Controller
             });
         }
 
-        $judges = $query->paginate(15);
+        // Status filter
+        if ($request->has('status') && $request->status != '') {
+            $status = $request->status == 'active';
+            $query->where('is_active', $status);
+        }
+
+        // Tag filter
+        if ($request->has('tag') && $request->tag != '') {
+            $tagId = $request->tag;
+            $query->whereHas('tags', function ($q) use ($tagId) {
+                $q->where('judge_tags.id', $tagId);
+            });
+        }
+
+        $judges = $query->paginate(15)->withQueryString();
+
+        // Get all tags for filter dropdown
+        $tags = JudgeTag::orderBy('name')->get();
 
         // Stats for dashboard
         $totalJudges = Judge::count();
@@ -40,17 +57,19 @@ class JudgeController extends Controller
         $totalTags = JudgeTag::count();
         $judgesThisMonth = Judge::whereMonth('created_at', now()->month)->count();
         $recentJudges = Judge::with('tags')->latest()->take(5)->get();
+
         return view('admin.judges.index', compact(
             'judges',
+            'tags',
             'totalJudges',
             'activeJudges',
             'totalTags',
             'judgesThisMonth',
             'recentJudges',
-            'title',
-
+            'title'
         ));
     }
+
     // Add this method in your JudgeController.php
     public function show(Judge $judge)
     {
@@ -276,5 +295,26 @@ class JudgeController extends Controller
         toast_deleted('Judge');
 
         return redirect()->route('admin.judges.index');
+    }
+
+    public function storeTag(Request $request)
+    {
+        $request->validate([
+            'name' => [
+                'required',
+                'string',
+                'max:255',
+                Rule::unique('judge_tags', 'name')
+            ]
+        ]);
+
+        $tag = JudgeTag::create([
+            'name' => $request->name
+        ]);
+
+        return response()->json([
+            'success' => true,
+            'tag' => $tag
+        ]);
     }
 }

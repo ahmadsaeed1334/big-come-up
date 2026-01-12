@@ -1,31 +1,54 @@
 @extends('layouts.guest')
 
 @section('content')
-    <div class="card shadow-sm">
-        <div class="card-body p-4">
-            <h4 class="mb-3">Verify Your Email</h4>
+    <main class="main-content mt-0">
+        <section>
+            <div class="page-header min-vh-100">
+                <div class="container">
+                    <div class="row">
 
-            <p class="text-muted small">
-                Before continuing, please verify your email address by clicking the link we just sent.
-            </p>
+                        <div class="col-xl-4 col-lg-5 col-md-7 d-flex flex-column mx-lg-0 mx-auto">
+                            <div class="card">
 
-            @if (session('status') == 'verification-link-sent')
-                <div class="alert alert-success">
-                    A new verification link has been sent to your email.
+                                <div class="card-header pb-0 text-start">
+                                    <h4 class="font-weight-bolder">Verify Email</h4>
+                                    <p class="mb-0">Please verify your email address</p>
+                                </div>
+
+                                <div class="card-body">
+
+                                    @if (session('status') === 'verification-link-sent')
+                                        <div class="alert alert-success">
+                                            A new verification link has been sent to your email.
+                                        </div>
+                                    @endif
+
+                                    <p class="text-muted">
+                                        Before continuing, check your email for a verification link.
+                                    </p>
+
+                                    <div class="d-flex justify-content-between mt-4">
+
+                                        <form method="POST" action="{{ route('verification.send') }}">
+                                            @csrf
+                                            <button class="btn btn-primary btn-sm">Resend Email</button>
+                                        </form>
+
+                                        <form method="POST" action="{{ route('logout') }}">
+                                            @csrf
+                                            <button class="btn btn-outline-secondary btn-sm">Logout</button>
+                                        </form>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        @include('auth.partials.auth-right-image')
+
+                    </div>
                 </div>
-            @endif
-
-            <div class="d-flex justify-content-between align-items-center">
-                <form method="POST" action="{{ route('verification.send') }}">
-                    @csrf
-                    <button class="btn btn-primary btn-sm">Resend Verification Email</button>
-                </form>
-
-                <form method="POST" action="{{ route('logout') }}">
-                    @csrf
-                    <button class="btn btn-outline-secondary btn-sm">Logout</button>
-                </form>
             </div>
-        </div>
-    </div>
+        </section>
+    </main>
 @endsection

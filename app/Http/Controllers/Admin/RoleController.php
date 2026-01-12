@@ -10,12 +10,28 @@ use Spatie\Permission\Models\Permission;
 
 class RoleController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
         $title = "Role";
-        $roles = Role::with('permissions')
-            ->orderBy('name')
-            ->get();
+
+        // Start query
+        $query = Role::with(['permissions', 'users'])->withCount('users');
+
+        // Search functionality
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where('name', 'like', "%{$search}%");
+        }
+
+        // Guard filter
+        if ($request->filled('guard')) {
+            $query->where('guard_name', $request->guard);
+        }
+
+        // Get roles with pagination
+        $roles = $query->orderBy('name')
+            ->paginate(10)
+            ->withQueryString();
 
         $permissions = Permission::query()
             ->orderBy('name')

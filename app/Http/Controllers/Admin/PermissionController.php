@@ -9,12 +9,28 @@ use Spatie\Permission\Models\Permission;
 
 class PermissionController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
         $title = "Permission";
-        $permissions = Permission::query()
-            ->orderBy('name')
-            ->paginate(10);
+
+        // Start query
+        $query = Permission::query();
+
+        // Search functionality
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where('name', 'like', "%{$search}%");
+        }
+
+        // Guard filter
+        if ($request->filled('guard')) {
+            $query->where('guard_name', $request->guard);
+        }
+
+        // Get permissions with pagination
+        $permissions = $query->orderBy('name')
+            ->paginate(10)
+            ->withQueryString();
 
         return view('admin.permissions.index', compact('permissions', 'title'));
     }

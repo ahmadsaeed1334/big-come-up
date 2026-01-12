@@ -10,12 +10,47 @@ use Illuminate\Validation\Rule;
 
 class ProductReviewController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
         $title = "Product Reviews";
-        $reviews = ProductReview::with('product')
-            ->orderBy('created_at', 'desc')
-            ->get();
+
+        // Start query
+        $query = ProductReview::query();
+
+        // Load relationships
+        $query->with(['product' => function ($query) {
+            $query->with(['artist', 'media' => function ($mediaQuery) {
+                $mediaQuery->where('collection_name', 'product_images');
+            }]);
+        }]);
+
+        // Search functionality
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where(function ($q) use ($search) {
+                $q->where('user_name', 'like', "%{$search}%")
+                    ->orWhere('title', 'like', "%{$search}%")
+                    ->orWhere('review', 'like', "%{$search}%")
+                    ->orWhereHas('product', function ($productQuery) use ($search) {
+                        $productQuery->where('title', 'like', "%{$search}%")
+                            ->orWhere('description', 'like', "%{$search}%")
+                            ->orWhereHas('artist', function ($artistQuery) use ($search) {
+                                $artistQuery->where('name', 'like', "%{$search}%");
+                            });
+                    });
+            });
+        }
+
+        // Rating filter
+        if ($request->filled('rating')) {
+            $rating = (int) $request->rating;
+            $query->where('rating', '>=', $rating);
+        }
+
+        // Order by and paginate
+        $reviews = $query->orderBy('created_at', 'desc')
+            ->paginate(10)
+            ->withQueryString();
 
         return view('admin.product-reviews.index', compact('reviews', 'title'));
     }

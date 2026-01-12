@@ -9,10 +9,20 @@ use Illuminate\Validation\Rule;
 
 class JudgeTagController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
         $title = "Judge Tags";
-        $tags = JudgeTag::withCount('judges')->orderBy('name')->get();
+
+        $query = JudgeTag::withCount('judges');
+
+        // Search functionality
+        if ($request->has('search') && $request->search != '') {
+            $search = $request->search;
+            $query->where('name', 'like', "%{$search}%");
+        }
+
+        $tags = $query->orderBy('name')->paginate(12);
+
         return view('admin.judge-tags.index', compact('tags', 'title'));
     }
 

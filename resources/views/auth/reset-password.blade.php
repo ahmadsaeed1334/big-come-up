@@ -1,46 +1,69 @@
 @extends('layouts.guest')
 
 @section('content')
-    <div class="card shadow-sm">
-        <div class="card-body p-4">
-            <h4 class="mb-3">Reset Password</h4>
+    <main class="main-content mt-0">
+        <section>
+            <div class="page-header min-vh-100">
+                <div class="container">
+                    <div class="row">
 
-            @if ($errors->any())
-                <div class="alert alert-danger">
-                    <ul class="mb-0">
-                        @foreach ($errors->all() as $error)
-                            <li>{{ $error }}</li>
-                        @endforeach
-                    </ul>
+                        <div class="col-xl-4 col-lg-5 col-md-7 d-flex flex-column mx-lg-0 mx-auto">
+                            <div class="card">
+
+                                <div class="card-header pb-0 text-start">
+                                    <h4 class="font-weight-bolder">Reset Password</h4>
+                                    <p class="mb-0">Choose a new password</p>
+                                </div>
+
+                                <div class="card-body">
+
+                                    @if ($errors->any())
+                                        <div class="alert alert-danger">
+                                            <ul class="mb-0">
+                                                @foreach ($errors->all() as $error)
+                                                    <li>{{ $error }}</li>
+                                                @endforeach
+                                            </ul>
+                                        </div>
+                                    @endif
+
+                                    <form method="POST" action="{{ route('password.update') }}">
+                                        @csrf
+
+                                        <input type="hidden" name="token" value="{{ request()->route('token') }}">
+
+                                        <div class="mb-3">
+                                            <input type="email" name="email" class="form-control form-control-lg"
+                                                value="{{ old('email', request('email')) }}" placeholder="Email" required>
+                                        </div>
+
+                                        <div class="mb-3">
+                                            <input type="password" name="password" class="form-control form-control-lg"
+                                                placeholder="New Password" required>
+                                        </div>
+
+                                        <div class="mb-3">
+                                            <input type="password" name="password_confirmation"
+                                                class="form-control form-control-lg" placeholder="Confirm Password"
+                                                required>
+                                        </div>
+
+                                        <div class="text-center">
+                                            <button class="btn btn-lg btn-success w-100 mt-4">
+                                                Reset Password
+                                            </button>
+                                        </div>
+
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+
+                        @include('auth.partials.auth-right-image')
+
+                    </div>
                 </div>
-            @endif
-
-            <form method="POST" action="{{ route('password.update') }}">
-                @csrf
-
-                <input type="hidden" name="token" value="{{ request()->route('token') }}">
-
-                <div class="mb-3">
-                    <label class="form-label">Email</label>
-                    <input type="email" name="email" value="{{ old('email', request('email')) }}" class="form-control"
-                        required autofocus>
-                </div>
-
-                <div class="mb-3">
-                    <label class="form-label">New Password</label>
-                    <input type="password" name="password" class="form-control" required autocomplete="new-password">
-                </div>
-
-                <div class="mb-3">
-                    <label class="form-label">Confirm Password</label>
-                    <input type="password" name="password_confirmation" class="form-control" required
-                        autocomplete="new-password">
-                </div>
-
-                <div class="d-flex justify-content-end">
-                    <button class="btn btn-success">Reset Password</button>
-                </div>
-            </form>
-        </div>
-    </div>
+            </div>
+        </section>
+    </main>
 @endsection

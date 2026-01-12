@@ -35,12 +35,6 @@ class UserController extends Controller
                     ->orWhere('email', 'like', "%{$q}%");
             });
         }
-
-        // filter by user_type
-        if ($request->filled('user_type')) {
-            $query->where('user_type', (int)$request->user_type);
-        }
-
         // filter by status
         if ($request->filled('status')) {
             if ($request->status === 'active') {
@@ -83,7 +77,7 @@ class UserController extends Controller
             'password' => ['required', 'string', 'min:6'],
 
             'role' => ['required', 'string', Rule::exists('roles', 'name')],
-            'user_type' => ['required', 'integer', Rule::in($types)],
+            // 'user_type' => ['required', 'integer', Rule::in($types)],
 
             'is_active' => ['nullable', 'boolean'],
         ]);
@@ -92,7 +86,7 @@ class UserController extends Controller
             'name' => $data['name'],
             'email' => $data['email'],
             'password' => $data['password'],
-            'user_type' => (int)$data['user_type'],
+            // 'user_type' => (int)$data['user_type'],
             'is_active' => (bool)($data['is_active'] ?? true),
         ]);
 
@@ -134,7 +128,7 @@ class UserController extends Controller
             'password' => ['nullable', 'string', 'min:6'],
 
             'role' => ['required', 'string', Rule::exists('roles', 'name')],
-            'user_type' => ['required', 'integer', Rule::in($types)],
+            // 'user_type' => ['required', 'integer', Rule::in($types)],
 
             'is_active' => ['nullable', 'boolean'],
         ]);
@@ -142,7 +136,7 @@ class UserController extends Controller
         $payload = [
             'name' => $data['name'],
             'email' => $data['email'],
-            'user_type' => (int)$data['user_type'],
+            // 'user_type' => (int)$data['user_type'],
             'is_active' => (bool)($data['is_active'] ?? $user->is_active),
         ];
 

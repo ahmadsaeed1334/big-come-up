@@ -7,28 +7,42 @@ use App\Models\ArtistsCategory;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
+use Illuminate\Support\Facades\Validator;
 
 class ArtistsCategoryController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
         $title = "Artist Categories";
-        $categories = ArtistsCategory::withCount('products')
-            ->orderBy('name')
-            ->get();
+        $search = $request->get('search');
 
-        return view('admin.artists-categories.index', compact('categories', 'title'));
+        $categories = ArtistsCategory::withCount('products')
+            ->when($search, function ($query) use ($search) {
+                $query->where('name', 'like', '%' . $search . '%')
+                    ->orWhere('slug', 'like', '%' . $search . '%');
+            })
+            ->orderBy('created_at', 'desc')
+            ->paginate(10)
+            ->withQueryString();
+
+        return view('admin.artists-categories.index', compact('categories', 'title', 'search'));
     }
 
     public function store(Request $request)
     {
-        $data = $request->validate([
+        $validator = Validator::make($request->all(), [
             'name' => ['required', 'string', 'max:255', 'unique:artists_categories,name']
         ]);
 
-        $data['slug'] = Str::slug($data['name']);
+        if ($validator->fails()) {
+            toast_error($validator->errors()->first());
+            return back();
+        }
 
-        ArtistsCategory::create($data);
+        ArtistsCategory::create([
+            'name' => $request->name,
+            'slug' => Str::slug($request->name),
+        ]);
 
         toast_created('Artist Category');
         return redirect()->route('admin.artists-categories.index');
@@ -36,7 +50,7 @@ class ArtistsCategoryController extends Controller
 
     public function update(Request $request, ArtistsCategory $artistsCategory)
     {
-        $data = $request->validate([
+        $validator = Validator::make($request->all(), [
             'name' => [
                 'required',
                 'string',
@@ -45,9 +59,15 @@ class ArtistsCategoryController extends Controller
             ]
         ]);
 
-        $data['slug'] = Str::slug($data['name']);
+        if ($validator->fails()) {
+            toast_error($validator->errors()->first());
+            return back();
+        }
 
-        $artistsCategory->update($data);
+        $artistsCategory->update([
+            'name' => $request->name,
+            'slug' => Str::slug($request->name),
+        ]);
 
         toast_updated('Artist Category');
         return redirect()->route('admin.artists-categories.index');
@@ -58,10 +78,10 @@ class ArtistsCategoryController extends Controller
         try {
             $artistsCategory->delete();
             toast_deleted('Artist Category');
+            return redirect()->route('admin.artists-categories.index');
         } catch (\Throwable $e) {
             toast_error('Unable to delete category. It may have products associated.');
+            return back();
         }
-
-        return back();
     }
 }
