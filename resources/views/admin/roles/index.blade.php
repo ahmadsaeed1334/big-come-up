@@ -272,7 +272,7 @@
 
         .permission-list .form-check {
             /* margin-bottom: 8px !important;
-                    padding: 8px 12px !important; */
+                        padding: 8px 12px !important; */
             border-radius: 6px !important;
             transition: all 0.2s ease !important;
         }
@@ -347,9 +347,9 @@
 
                                     <div class="col-md-3">
                                         <div class="d-flex gap-2">
-                                            <button type="submit" class="btn bg-gradient-primary mb-0">
+                                            {{-- <button type="submit" class="btn bg-gradient-primary mb-0">
                                                 <i class="ni ni-zoom-split-in"></i> Search
-                                            </button>
+                                            </button> --}}
                                             @if (request()->hasAny(['search', 'guard']))
                                                 <a href="{{ route('admin.roles.index') }}"
                                                     class="btn bg-gradient-secondary mb-0">

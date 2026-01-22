@@ -9,7 +9,7 @@
                 <div class="card shadow mb-4">
                     <div class="card-header py-3 d-flex justify-content-between align-items-center">
                         <div>
-                            <h6 class="m-0 font-weight-bold text-primary">Create New User</h6>
+                            <h6 class="m-0 font-weight-bold">Create New User</h6>
                             <p class="text-sm mb-0 text-muted">Add a new user to the system</p>
                         </div>
                         <a href="{{ route('admin.users.index') }}" class="btn btn-sm btn-outline-secondary">
@@ -36,8 +36,7 @@
                             <div class="row g-3">
                                 <div class="col-md-6">
                                     <div class="form-group">
-                                        <label class="form-label text-primary mb-1">Full Name <span
-                                                class="text-danger">*</span></label>
+                                        <label class="form-label mb-1">Full Name <span class="text-danger">*</span></label>
                                         <div class="input-group">
                                             <span class="input-group-text">
                                                 <i class="fas fa-user"></i>
@@ -53,7 +52,7 @@
 
                                 <div class="col-md-6">
                                     <div class="form-group">
-                                        <label class="form-label text-primary mb-1">Email Address <span
+                                        <label class="form-label mb-1">Email Address <span
                                                 class="text-danger">*</span></label>
                                         <div class="input-group">
                                             <span class="input-group-text">
@@ -70,18 +69,18 @@
 
                                 <div class="col-md-6">
                                     <div class="form-group">
-                                        <label class="form-label text-primary mb-1">Password <span
-                                                class="text-danger">*</span></label>
+                                        <label class="form-label mb-1">Password <span class="text-danger">*</span></label>
                                         <div class="input-group">
                                             <span class="input-group-text">
                                                 <i class="fas fa-lock"></i>
                                             </span>
-                                            <input type="password" name="password" class="form-control border-start-0"
-                                                placeholder="Enter password" required>
+                                            <input type="password" name="password" id="password"
+                                                class="form-control border-start-0" placeholder="Enter password" required>
                                             <button class="btn btn-outline-secondary" type="button" id="togglePassword">
                                                 <i class="fas fa-eye"></i>
                                             </button>
                                         </div>
+                                        <div id="passwordStrength" class="mt-2"></div>
                                         <div class="form-text text-muted">
                                             Minimum 8 characters with letters and numbers.
                                         </div>
@@ -93,15 +92,20 @@
 
                                 <div class="col-md-6">
                                     <div class="form-group">
-                                        <label class="form-label text-primary mb-1">Confirm Password <span
+                                        <label class="form-label mb-1">Confirm Password <span
                                                 class="text-danger">*</span></label>
                                         <div class="input-group">
                                             <span class="input-group-text">
                                                 <i class="fas fa-lock"></i>
                                             </span>
-                                            <input type="password" name="password_confirmation"
+                                            <input type="password" name="password_confirmation" id="confirmPassword"
                                                 class="form-control border-start-0" placeholder="Confirm password" required>
+                                            <button class="btn btn-outline-secondary" type="button"
+                                                id="toggleConfirmPassword">
+                                                <i class="fas fa-eye"></i>
+                                            </button>
                                         </div>
+                                        <div id="passwordMatch" class="mt-2"></div>
                                         <div class="invalid-feedback">
                                             Passwords must match.
                                         </div>
@@ -110,8 +114,7 @@
 
                                 <div class="col-md-6">
                                     <div class="form-group">
-                                        <label class="form-label text-primary mb-1">Role <span
-                                                class="text-danger">*</span></label>
+                                        <label class="form-label mb-1">Role <span class="text-danger">*</span></label>
                                         <div class="input-group">
                                             <span class="input-group-text">
                                                 <i class="fas fa-user-tag"></i>
@@ -134,7 +137,7 @@
 
                                 <div class="col-md-6">
                                     <div class="form-group">
-                                        <label class="form-label text-primary mb-1">Status</label>
+                                        <label class="form-label mb-1">Status</label>
                                         <div class="d-flex align-items-center">
                                             <div class="form-check form-switch">
                                                 <input class="form-check-input" type="checkbox" role="switch"
@@ -209,6 +212,48 @@
             background-position: right calc(0.375em + 0.1875rem) center;
             background-size: calc(0.75em + 0.375rem) calc(0.75em + 0.375rem);
         }
+
+        /* Password match indicator */
+        #passwordMatch {
+            font-size: 0.875rem;
+            font-weight: 500;
+        }
+
+        .password-match {
+            color: #28a745;
+        }
+
+        .password-mismatch {
+            color: #dc3545;
+        }
+
+        /* Password strength indicator */
+        .strength-weak {
+            color: #dc3545;
+        }
+
+        .strength-fair {
+            color: #fd7e14;
+        }
+
+        .strength-good {
+            color: #17a2b8;
+        }
+
+        .strength-strong {
+            color: #28a745;
+        }
+
+        .progress {
+            background-color: #e9ecef;
+            border-radius: 0.25rem;
+            overflow: hidden;
+            margin-bottom: 0.25rem;
+        }
+
+        .progress-bar {
+            transition: width 0.3s ease;
+        }
     </style>
 
     <script>
@@ -217,6 +262,17 @@
             const forms = document.querySelectorAll('.needs-validation');
             Array.from(forms).forEach(form => {
                 form.addEventListener('submit', event => {
+                    const password = document.getElementById('password').value;
+                    const confirmPassword = document.getElementById('confirmPassword').value;
+
+                    // Check if passwords match
+                    if (password !== confirmPassword) {
+                        event.preventDefault();
+                        event.stopPropagation();
+                        showPasswordMatch(false);
+                        return false;
+                    }
+
                     if (!form.checkValidity()) {
                         event.preventDefault();
                         event.stopPropagation();
@@ -225,11 +281,11 @@
                 }, false);
             });
 
-            // Toggle password visibility
+            // Toggle password visibility for main password
             const togglePassword = document.getElementById('togglePassword');
             if (togglePassword) {
                 togglePassword.addEventListener('click', function() {
-                    const passwordInput = document.querySelector('input[name="password"]');
+                    const passwordInput = document.getElementById('password');
                     const icon = this.querySelector('i');
 
                     if (passwordInput.type === 'password') {
@@ -244,29 +300,59 @@
                 });
             }
 
-            // Password strength indicator
-            const passwordInput = document.querySelector('input[name="password"]');
-            if (passwordInput) {
-                passwordInput.addEventListener('input', function() {
-                    const password = this.value;
-                    const strengthIndicator = document.getElementById('passwordStrength');
+            // Toggle password visibility for confirm password
+            const toggleConfirmPassword = document.getElementById('toggleConfirmPassword');
+            if (toggleConfirmPassword) {
+                toggleConfirmPassword.addEventListener('click', function() {
+                    const confirmPasswordInput = document.getElementById('confirmPassword');
+                    const icon = this.querySelector('i');
 
-                    if (!strengthIndicator) {
-                        // Create strength indicator if it doesn't exist
-                        const indicator = document.createElement('div');
-                        indicator.id = 'passwordStrength';
-                        indicator.className = 'mt-2';
-                        this.parentNode.parentNode.appendChild(indicator);
+                    if (confirmPasswordInput.type === 'password') {
+                        confirmPasswordInput.type = 'text';
+                        icon.classList.remove('fa-eye');
+                        icon.classList.add('fa-eye-slash');
+                    } else {
+                        confirmPasswordInput.type = 'password';
+                        icon.classList.remove('fa-eye-slash');
+                        icon.classList.add('fa-eye');
                     }
-
-                    updatePasswordStrength(password, strengthIndicator);
                 });
             }
 
+            // Password strength indicator
+            const passwordInput = document.getElementById('password');
+            const confirmPasswordInput = document.getElementById('confirmPassword');
+
+            if (passwordInput) {
+                // Initialize password strength indicator
+                const strengthIndicator = document.getElementById('passwordStrength');
+                updatePasswordStrength(passwordInput.value, strengthIndicator);
+
+                passwordInput.addEventListener('input', function() {
+                    const password = this.value;
+                    updatePasswordStrength(password, strengthIndicator);
+
+                    // Also check password match when password changes
+                    if (confirmPasswordInput.value) {
+                        checkPasswordMatch(password, confirmPasswordInput.value);
+                    }
+                });
+            }
+
+            if (confirmPasswordInput) {
+                confirmPasswordInput.addEventListener('input', function() {
+                    const password = passwordInput.value;
+                    const confirmPassword = this.value;
+                    checkPasswordMatch(password, confirmPassword);
+                });
+            }
+
+            // Function to update password strength
             function updatePasswordStrength(password, indicator) {
                 let strength = 0;
                 let text = '';
-                let color = 'danger';
+                let colorClass = 'strength-weak';
+                let progressColor = 'bg-danger';
 
                 if (password.length >= 8) strength++;
                 if (/[A-Z]/.test(password)) strength++;
@@ -276,33 +362,150 @@
                 switch (strength) {
                     case 0:
                         text = 'Very Weak';
-                        color = 'danger';
+                        colorClass = 'strength-weak';
+                        progressColor = 'bg-danger';
                         break;
                     case 1:
                         text = 'Weak';
-                        color = 'danger';
+                        colorClass = 'strength-weak';
+                        progressColor = 'bg-danger';
                         break;
                     case 2:
                         text = 'Fair';
-                        color = 'warning';
+                        colorClass = 'strength-fair';
+                        progressColor = 'bg-warning';
                         break;
                     case 3:
                         text = 'Good';
-                        color = 'info';
+                        colorClass = 'strength-good';
+                        progressColor = 'bg-info';
                         break;
                     case 4:
                         text = 'Strong';
-                        color = 'success';
+                        colorClass = 'strength-strong';
+                        progressColor = 'bg-success';
                         break;
                 }
 
                 indicator.innerHTML = `
-                    <div class="progress" style="height: 5px;">
-                        <div class="progress-bar bg-${color}" role="progressbar" 
+                    <div class="d-flex justify-content-between align-items-center mb-1">
+                        <span class="${colorClass}">${text}</span>
+                        <small class="text-muted">${strength}/4 criteria</small>
+                    </div>
+                    <div class="progress" style="height: 6px;">
+                        <div class="progress-bar ${progressColor}" role="progressbar" 
                              style="width: ${strength * 25}%"></div>
                     </div>
-                    <small class="text-${color}">${text}</small>
+                    <div class="mt-1">
+                        <small class="text-muted">
+                            <i class="fas ${password.length >= 8 ? 'fa-check text-success' : 'fa-times text-danger'} me-1"></i>
+                            At least 8 characters
+                        </small>
+                        <br>
+                        <small class="text-muted">
+                            <i class="fas ${/[A-Z]/.test(password) ? 'fa-check text-success' : 'fa-times text-danger'} me-1"></i>
+                            Uppercase letter
+                        </small>
+                        <br>
+                        <small class="text-muted">
+                            <i class="fas ${/[0-9]/.test(password) ? 'fa-check text-success' : 'fa-times text-danger'} me-1"></i>
+                            Number
+                        </small>
+                        <br>
+                        <small class="text-muted">
+                            <i class="fas ${/[^A-Za-z0-9]/.test(password) ? 'fa-check text-success' : 'fa-times text-danger'} me-1"></i>
+                            Special character
+                        </small>
+                    </div>
                 `;
+            }
+
+            // Function to check password match
+            function checkPasswordMatch(password, confirmPassword) {
+                const matchIndicator = document.getElementById('passwordMatch');
+
+                if (!confirmPassword) {
+                    matchIndicator.innerHTML = '';
+                    return;
+                }
+
+                if (password === confirmPassword) {
+                    showPasswordMatch(true);
+                } else {
+                    showPasswordMatch(false);
+                }
+            }
+
+            // Function to show password match status
+            function showPasswordMatch(isMatch) {
+                const matchIndicator = document.getElementById('passwordMatch');
+
+                if (isMatch) {
+                    matchIndicator.innerHTML = `
+                        <div class="password-match">
+                            <i class="fas fa-check-circle me-1"></i>
+                            Passwords match
+                        </div>
+                    `;
+                    matchIndicator.classList.remove('password-mismatch');
+                    matchIndicator.classList.add('password-match');
+                } else {
+                    matchIndicator.innerHTML = `
+                        <div class="password-mismatch">
+                            <i class="fas fa-times-circle me-1"></i>
+                            Passwords do not match
+                        </div>
+                    `;
+                    matchIndicator.classList.remove('password-match');
+                    matchIndicator.classList.add('password-mismatch');
+                }
+            }
+
+            // Real-time validation for passwords
+            let passwordTimeout, confirmPasswordTimeout;
+
+            passwordInput.addEventListener('input', function() {
+                clearTimeout(passwordTimeout);
+                passwordTimeout = setTimeout(() => {
+                    validatePassword(this.value);
+                }, 500);
+            });
+
+            confirmPasswordInput.addEventListener('input', function() {
+                clearTimeout(confirmPasswordTimeout);
+                confirmPasswordTimeout = setTimeout(() => {
+                    validateConfirmPassword(this.value);
+                }, 500);
+            });
+
+            function validatePassword(password) {
+                const isValid = password.length >= 8;
+                const passwordField = document.getElementById('password');
+
+                if (password && !isValid) {
+                    passwordField.classList.add('is-invalid');
+                    passwordField.classList.remove('is-valid');
+                } else if (password && isValid) {
+                    passwordField.classList.remove('is-invalid');
+                    passwordField.classList.add('is-valid');
+                } else {
+                    passwordField.classList.remove('is-invalid', 'is-valid');
+                }
+            }
+
+            function validateConfirmPassword(confirmPassword) {
+                const password = passwordInput.value;
+                const confirmPasswordField = document.getElementById('confirmPassword');
+
+                if (confirmPassword && password !== confirmPassword) {
+                    confirmPasswordField.classList.add('is-invalid');
+                    confirmPasswordField.classList.remove('is-valid');
+                } else if (confirmPassword && password === confirmPassword) {
+                    confirmPasswordField.classList.remove('is-invalid');
+                    confirmPasswordField.classList.add('is-valid');
+                } else {
+                    confirmPasswordField.classList.remove('is-invalid', 'is-valid');
+                }
             }
         });
     </script>

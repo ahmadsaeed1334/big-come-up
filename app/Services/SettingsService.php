@@ -64,6 +64,15 @@ class SettingsService
         'default_language' => 'English',
       ],
 
+      'theme' => [
+        'sidebar_color' => 'primary', // primary, dark, info, success, warning, danger
+        'sidebar_custom_color' => '#4e73df',
+        'sidenav_type' => 'bg-white', // bg-white, bg-default
+        'dark_mode' => false,
+        'navbar_color' => 'bg-white',
+        'navbar_custom_color' => '#ffffff',
+      ],
+
       'sweetalert' => [
         'default_title' => 'Operation Succeeded!',
         'default_message' => 'The desired outcome has been achieved.',
@@ -116,6 +125,35 @@ class SettingsService
         'reply_to_email' => '',
       ],
     ];
+  }
+
+  /**
+   * Update theme settings
+   */
+  public function updateThemeSettings(array $themeData): void
+  {
+    $data = $this->getAll();
+    $data['theme'] = array_merge($data['theme'], $themeData);
+    $this->putAll($data);
+  }
+
+  /**
+   * Get theme settings
+   */
+  public function getThemeSettings(): array
+  {
+    $data = $this->getAll();
+    return $data['theme'];
+  }
+
+  /**
+   * Save individual theme setting
+   */
+  public function saveThemeSetting(string $key, $value): void
+  {
+    $data = $this->getAll();
+    $data['theme'][$key] = $value;
+    $this->putAll($data);
   }
 
   /**

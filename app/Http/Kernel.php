@@ -34,7 +34,8 @@ class Kernel extends HttpKernel
             \App\Http\Middleware\VerifyCsrfToken::class,
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
             \App\Http\Middleware\SessionTimeout::class,
-            \App\Http\Middleware\CheckSessionExpiry::class, // Add this line
+            // \App\Http\Middleware\CheckSessionExpiry::class,
+            \App\Http\Middleware\HandleSession::class,
 
         ],
 
@@ -43,7 +44,6 @@ class Kernel extends HttpKernel
             // \Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::class,
             \Illuminate\Routing\Middleware\ThrottleRequests::class . ':api',
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
-            \App\Http\Middleware\CheckSessionExpiry::class, // Add this line
 
         ],
     ];

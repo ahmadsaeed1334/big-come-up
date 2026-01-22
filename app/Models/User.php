@@ -60,4 +60,63 @@ class User extends Authenticatable
         $first = $this->getRoleNames()->first();
         $this->forceFill(['role' => $first])->saveQuietly();
     }
+    public function artistProfile()
+    {
+        return $this->hasOne(ArtistProfile::class);
+    }
+
+    public function artistStat()
+    {
+        return $this->hasOne(ArtistStat::class);
+    }
+
+    public function performances()
+    {
+        return $this->hasMany(Performance::class);
+    }
+
+    public function artistsVote()
+    {
+        return $this->hasMany(ArtistsVote::class);
+    }
+
+    public function comments()
+    {
+        return $this->hasMany(Comment::class);
+    }
+
+    public function watchHistories()
+    {
+        return $this->hasMany(WatchHistory::class);
+    }
+
+    public function notificationPreference()
+    {
+        return $this->hasOne(\App\Models\UserNotificationPreference::class);
+    }
+
+    public function privacyPreference()
+    {
+        return $this->hasOne(\App\Models\UserPrivacyPreference::class);
+    }
+
+    public function interestPreference()
+    {
+        return $this->hasOne(\App\Models\UserInterestPreference::class);
+    }
+
+    public function sweepstakesSetting()
+    {
+        return $this->hasOne(\App\Models\SweepstakesSetting::class);
+    }
+
+    public function shopPreference()
+    {
+        return $this->hasOne(\App\Models\ShopPreference::class);
+    }
+
+    public function loginSessions()
+    {
+        return $this->hasMany(\App\Models\LoginSession::class);
+    }
 }

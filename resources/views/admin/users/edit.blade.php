@@ -9,7 +9,7 @@
                 <div class="card shadow mb-4">
                     <div class="card-header py-3 d-flex justify-content-between align-items-center">
                         <div>
-                            <h6 class="m-0 font-weight-bold text-primary">Edit User</h6>
+                            <h6 class="m-0 font-weight-bold  ">Edit User</h6>
                             <p class="text-sm mb-0 text-muted">Update user information</p>
                         </div>
                         <a href="{{ route('admin.users.index') }}" class="btn btn-sm btn-outline-secondary">
@@ -22,7 +22,7 @@
                             <div class="card-body">
                                 <div class="row">
                                     <div class="col-md-6">
-                                        <h6 class="text-primary mb-2">Current Information</h6>
+                                        <h6 class="  mb-2">Current Information</h6>
                                         <div class="d-flex align-items-center mb-3">
                                             <div class="avatar me-3">
                                                 @if ($user->avatar)
@@ -84,7 +84,7 @@
                             <div class="row g-3">
                                 <div class="col-md-6">
                                     <div class="form-group">
-                                        <label class="form-label text-primary mb-1">Full Name <span
+                                        <label class="form-label   mb-1">Full Name <span
                                                 class="text-danger">*</span></label>
                                         <div class="input-group">
                                             <span class="input-group-text">
@@ -102,7 +102,7 @@
 
                                 <div class="col-md-6">
                                     <div class="form-group">
-                                        <label class="form-label text-primary mb-1">Email Address <span
+                                        <label class="form-label   mb-1">Email Address <span
                                                 class="text-danger">*</span></label>
                                         <div class="input-group">
                                             <span class="input-group-text">
@@ -120,7 +120,7 @@
 
                                 <div class="col-md-6">
                                     <div class="form-group">
-                                        <label class="form-label text-primary mb-1">New Password (Optional)</label>
+                                        <label class="form-label   mb-1">New Password (Optional)</label>
                                         <div class="input-group">
                                             <span class="input-group-text">
                                                 <i class="fas fa-lock"></i>
@@ -139,7 +139,7 @@
 
                                 <div class="col-md-6">
                                     <div class="form-group">
-                                        <label class="form-label text-primary mb-1">Confirm Password</label>
+                                        <label class="form-label   mb-1">Confirm Password</label>
                                         <div class="input-group">
                                             <span class="input-group-text">
                                                 <i class="fas fa-lock"></i>
@@ -152,8 +152,7 @@
 
                                 <div class="col-md-6">
                                     <div class="form-group">
-                                        <label class="form-label text-primary mb-1">Role <span
-                                                class="text-danger">*</span></label>
+                                        <label class="form-label   mb-1">Role <span class="text-danger">*</span></label>
                                         <div class="input-group">
                                             <span class="input-group-text">
                                                 <i class="fas fa-user-tag"></i>
@@ -176,7 +175,7 @@
 
                                 <div class="col-md-6">
                                     <div class="form-group">
-                                        <label class="form-label text-primary mb-1">Status</label>
+                                        <label class="form-label   mb-1">Status</label>
                                         <div class="d-flex align-items-center">
                                             <div class="form-check form-switch">
                                                 <input class="form-check-input" type="checkbox" role="switch"

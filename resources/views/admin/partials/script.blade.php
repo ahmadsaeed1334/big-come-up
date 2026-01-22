@@ -283,5 +283,7 @@
           }
       </style>
   @endif
+
+  <script></script>
   @stack('scripts')
   @include('admin.partials.ckeditor')

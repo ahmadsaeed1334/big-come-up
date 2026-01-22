@@ -34,6 +34,10 @@
         .clear-search:hover {
             color: #dc3545;
         }
+
+        h3 {
+            color: white;
+        }
     </style>
 
     <div class="container-fluid py-4">
@@ -41,14 +45,8 @@
             <div class="col">
                 <div class="d-flex justify-content-between align-items-center">
                     <div>
-                        <h5 class="mb-0">Users</h5>
-                        <nav aria-label="breadcrumb">
-                            <ol class="breadcrumb">
-                                <li class="breadcrumb-item text-sm"><a class="text-secondary"
-                                        href="{{ route('admin.dashboard') }}">Dashboard</a></li>
-                                <li class="breadcrumb-item text-sm text-dark active" aria-current="page">Users</li>
-                            </ol>
-                        </nav>
+                        <h3 class="mb-0">Users</h3>
+
                     </div>
                     <a href="{{ route('admin.users.create') }}" class="btn btn-sm btn-primary mb-0">
                         <i class="fas fa-plus me-1"></i>
@@ -242,8 +240,8 @@
                                                             <i class="fas fa-trash"></i>
                                                         </button>
                                                         <form id="delete-user-{{ $u->id }}"
-                                                            action="{{ route('admin.users.destroy', $u) }}"
-                                                            method="POST" style="display:none;">
+                                                            action="{{ route('admin.users.destroy', $u) }}" method="POST"
+                                                            style="display:none;">
                                                             @csrf
                                                             @method('DELETE')
                                                         </form>

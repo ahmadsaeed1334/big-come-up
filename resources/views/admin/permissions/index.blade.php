@@ -16,14 +16,14 @@
         }
 
         /*
-                .search-icon {
-                    position: absolute;
-                    left: 12px;
-                    top: 50%;
-                    transform: translateY(-50%);
-                    color: #6c757d;
-                    z-index: 10;
-                } */
+                    .search-icon {
+                        position: absolute;
+                        left: 12px;
+                        top: 50%;
+                        transform: translateY(-50%);
+                        color: #6c757d;
+                        z-index: 10;
+                    } */
 
         .clear-search {
             position: absolute;
@@ -68,9 +68,9 @@
         }
 
         /* .action-btn {
-                            padding: 0.25rem 0.5rem;
-                            font-size: 0.875rem;
-                        } */
+                                padding: 0.25rem 0.5rem;
+                                font-size: 0.875rem;
+                            } */
 
         /* Modal styling */
         .modal-header {
@@ -131,9 +131,9 @@
 
                                     <div class="col-md-3">
                                         <div class="d-flex gap-2">
-                                            <button type="submit" class="btn bg-gradient-primary mb-0">
+                                            {{-- <button type="submit" class="btn bg-gradient-primary mb-0">
                                                 <i class="fas fa-search search-icon"></i> Search
-                                            </button>
+                                            </button> --}}
                                             @if (request()->hasAny(['search', 'guard']))
                                                 <a href="{{ route('admin.permissions.index') }}"
                                                     class="btn bg-gradient-secondary mb-0">

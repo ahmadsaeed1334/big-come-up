@@ -101,7 +101,7 @@
                       {{-- Login button (Laravel) --}}
                       @if (Route::has('login'))
                           @auth
-                              <a class="btn btn-login ms-lg-2" href="{{ url('/dashboard') }}">
+                              <a class="btn btn-login ms-lg-2" href="{{ url('/admin/dashboard') }}">
                                   Dashboard <span class="ms-1">→</span>
                               </a>
                           @else

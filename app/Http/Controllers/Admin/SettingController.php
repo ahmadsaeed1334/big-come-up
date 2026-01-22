@@ -224,4 +224,33 @@ class SettingController extends Controller
         // store new
         return $request->file($key)->store('settings', 'public');
     }
+
+    public function updateTheme(Request $request, SettingsService $settings)
+    {
+        $validated = $request->validate([
+            'sidebar_color' => ['nullable', 'string', 'in:primary,dark,info,success,warning,danger'],
+            'sidenav_type' => ['nullable', 'string', 'in:bg-white,bg-default'],
+            'dark_mode' => ['nullable', 'boolean'],
+        ]);
+
+        // Update theme settings
+        $settings->updateThemeSettings([
+            'sidebar_color' => $validated['sidebar_color'] ?? 'primary',
+            'sidenav_type' => $validated['sidenav_type'] ?? 'bg-white',
+            'dark_mode' => $validated['dark_mode'] ?? false,
+        ]);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Theme settings updated successfully',
+            'theme' => $settings->getThemeSettings()
+        ]);
+    }
+
+    public function getThemeSettings(SettingsService $settings)
+    {
+        return response()->json([
+            'theme' => $settings->getThemeSettings()
+        ]);
+    }
 }

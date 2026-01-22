@@ -26,14 +26,21 @@ use App\Http\Controllers\UserSide\HomeController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\{
     ArtistController,
+    ArtistProfileController,
     ArtistsCategoryController,
     ArtistsProductController,
     ColorController,
+    Dashboard,
+    MediaController,
     ProductReviewController,
     SizeController
 };
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
+use App\Http\Controllers\UserSide\ProfileController;
+use App\Http\Controllers\UserSide\SettingsController;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 // Route::get('/', function () {
 //     return view('welcome');
@@ -60,15 +67,16 @@ Route::view('/checkout', 'user-side.card.checkout')->name('card.checkout');
 Route::view('/table', 'admin.partials.table')->name('partials.table');
 Route::view('/my-profile', 'user-side.my-profile.index')->name('my-profile.index');
 
-Route::middleware(['auth', 'verified'])->get('/admin/dashboard', function () {
-    return view('dashboard');
-})->name('admin.dashboard');
+// Route::middleware(['auth', 'verified'])->get('/admin/dashboard', function () {
+//     return view('dashboard');
+// })->name('admin.dashboard');
 
-Route::middleware(['auth', 'verified'])->get('/home', function () {
-    return redirect()->route('dashboard');
-})->name('home');
-
-
+Route::middleware(['auth'])
+    ->prefix('admin')
+    ->name('admin.')
+    ->group(function () {
+        Route::get('/dashboard', [Dashboard::class, 'index'])->name('dashboard');
+    });
 Route::middleware('guest')->group(function () {
     Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
     Route::post('/login', [LoginController::class, 'login']);
@@ -76,7 +84,20 @@ Route::middleware('guest')->group(function () {
     Route::get('/register', [RegisterController::class, 'showRegistrationForm'])->name('register');
     Route::post('/register', [RegisterController::class, 'register']);
 });
+Route::get('/test-session', function (Request $request) {
+    // Set session data
+    $request->session()->put('test_key', 'test_value');
+    $request->session()->put('test_time', now()->toDateTimeString());
 
+    // Get session data
+    return response()->json([
+        'session_id' => session()->getId(),
+        'test_key' => session()->get('test_key'),
+        'test_time' => session()->get('test_time'),
+        'session_driver' => config('session.driver'),
+        'session_lifetime' => config('session.lifetime'),
+    ]);
+});
 Route::middleware(['auth'])
     ->prefix('admin')
     ->name('admin.')
@@ -158,6 +179,9 @@ Route::middleware(['auth'])
     ->group(function () {
         Route::get('settings', [SettingController::class, 'edit'])->name('settings.edit');
         Route::post('settings', [SettingController::class, 'update'])->name('settings.update');
+        // Theme routes
+        Route::post('theme/update', [SettingController::class, 'updateTheme'])->name('theme.update');
+        Route::get('theme/settings', [SettingController::class, 'getThemeSettings'])->name('theme.settings');
     });
 Route::middleware(['auth'])
     ->prefix('admin')
@@ -201,8 +225,6 @@ Route::prefix('admin')
         Route::put('/how-it-works/{step}', [HowItWorksController::class, 'update'])->name('how.update');
         Route::delete('/how-it-works/{step}', [HowItWorksController::class, 'destroy'])->name('how.destroy');
     });
-
-// routes/web.php
 Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () {
     // Judges CRUD
     Route::resource('judges', JudgeController::class);
@@ -261,3 +283,51 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'verified'])->group(
 });
 // Public judge profile
 Route::get('/judge/{id}', [JudgeController::class, 'show'])->name('judge.profile');
+
+
+Route::prefix('admin')->name('admin.')->middleware(['auth'])->group(function () {
+
+    Route::get('artists-profile', [ArtistProfileController::class, 'index'])
+        ->name('artists-profile.index');
+
+    Route::get('artists-profile/{artist}', [ArtistProfileController::class, 'show'])
+        ->name('artists-profile.show');
+
+    Route::get('artists-profile/{artist}/edit', [ArtistProfileController::class, 'edit'])
+        ->name('artists-profile.edit');
+
+    Route::put('artists-profile/{artist}', [ArtistProfileController::class, 'update'])
+        ->name('artists-profile.update');
+
+    Route::delete('artists-profile/{artist}', [ArtistProfileController::class, 'destroy'])
+        ->name('artists-profile.destroy');
+});
+
+
+Route::middleware(['auth'])->group(function () {
+    Route::get('/me/profile', [ProfileController::class, 'show'])->name('me.profile');
+
+    Route::put('/me/profile', [ProfileController::class, 'update'])->name('me.profile.update');
+
+    // Settings modal saves (AJAX friendly)
+    Route::put('/me/settings/notifications', [SettingsController::class, 'updateNotifications'])->name('me.settings.notifications');
+    Route::put('/me/settings/privacy', [SettingsController::class, 'updatePrivacy'])->name('me.settings.privacy');
+    Route::put('/me/settings/interests', [SettingsController::class, 'updateInterests'])->name('me.settings.interests');
+    Route::put('/me/settings/sweepstakes', [SettingsController::class, 'updateSweepstakes'])->name('me.settings.sweepstakes');
+    Route::put('/me/settings/shop', [SettingsController::class, 'updateShop'])->name('me.settings.shop');
+});
+// Media Management Routes
+Route::prefix('admin/media')->name('admin.media.')->middleware(['auth'])->group(function () {
+    Route::get('/', [MediaController::class, 'index'])->name('index');
+    Route::get('/upload', [MediaController::class, 'create'])->name('create');
+    Route::post('/upload', [MediaController::class, 'store'])->name('store');
+    Route::get('/statistics', [MediaController::class, 'statistics'])->name('statistics');
+    Route::get('/{media}', [MediaController::class, 'show'])->name('show');
+    Route::get('/{media}/edit', [MediaController::class, 'edit'])->name('edit');
+    Route::put('/{media}', [MediaController::class, 'update'])->name('update');
+    Route::delete('/{media}', [MediaController::class, 'destroy'])->name('destroy');
+    Route::get('/{media}/download', [MediaController::class, 'download'])->name('download');
+    Route::post('/bulk-delete', [MediaController::class, 'bulkDestroy'])->name('bulk-destroy');
+});
+// Public artist profile view
+// Route::get('/artist/{username}', [PublicProfileController::class, 'show'])->name('artist.public');

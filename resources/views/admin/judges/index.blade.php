@@ -3,12 +3,13 @@
 @section('title', 'Manage Judges')
 
 @section('content')
+
     <div class="row">
         <div class="col-12">
             <div class="card mb-4">
                 <div class="card-header pb-0">
                     <div class="d-flex justify-content-between align-items-center">
-                        <h6>Judges Management</h6>
+                        <h3>Judges Management</h3>
                         <a href="{{ route('admin.judges.create') }}" class="btn btn-primary btn-sm">
                             <i class="bi bi-plus-circle me-1"></i> Add New Judge
                         </a>

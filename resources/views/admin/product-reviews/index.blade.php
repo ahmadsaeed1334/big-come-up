@@ -134,7 +134,7 @@
     <div class="d-flex justify-content-between align-items-center mb-3">
         <div>
             <h3 class="mb-0">Product Reviews</h3>
-            <small class="text-muted">Manage customer reviews for products</small>
+            {{-- <small class="text-muted">Manage customer reviews for products</small> --}}
         </div>
     </div>
 

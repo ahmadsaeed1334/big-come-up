@@ -10,8 +10,9 @@ class HowItWorksController extends Controller
 {
     public function index()
     {
+        $title = "How It Works Steps";
         $steps = HowItWorksStep::orderBy('step_number')->get();
-        return view('admin.how-it-works.index', compact('steps'));
+        return view('admin.how-it-works.index', compact('steps', 'title'));
     }
 
     public function store(Request $request)

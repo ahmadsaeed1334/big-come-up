@@ -10,6 +10,7 @@ class HeroSectionController extends Controller
 {
     public function edit()
     {
+        $title = "Edit Hero Section";
         $hero = HeroSection::first();
 
         if (!$hero) {
@@ -24,7 +25,7 @@ class HeroSectionController extends Controller
             ]);
         }
 
-        return view('admin.hero.edit', compact('hero'));
+        return view('admin.hero.edit', compact('hero', 'title'));
     }
 
     public function update(Request $request)
