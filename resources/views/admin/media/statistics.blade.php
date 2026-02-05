@@ -23,8 +23,9 @@
                             </div>
                         </div>
 
-                        {{-- Statistics Cards --}}
+                        {{-- Statistics Cards Section --}}
                         <div class="row mt-3">
+                            {{-- Total Files --}}
                             <div class="col-xl-3 col-sm-6 mb-xl-0 mb-4">
                                 <div class="card">
                                     <div class="card-body p-3">
@@ -55,6 +56,7 @@
                                 </div>
                             </div>
 
+                            {{-- Images --}}
                             <div class="col-xl-3 col-sm-6 mb-xl-0 mb-4">
                                 <div class="card">
                                     <div class="card-body p-3">
@@ -63,7 +65,7 @@
                                                 <div class="numbers">
                                                     <p class="text-sm mb-0 text-uppercase font-weight-bold">Images</p>
                                                     <h5 class="font-weight-bolder">
-                                                        {{ number_format($imageCount = $byMimeType->where('type', 'image')->first()->count ?? 0) }}
+                                                        {{ number_format($imageCount) }}
                                                     </h5>
                                                     <p class="mb-0 text-sm">
                                                         <span class="text-success text-sm font-weight-bolder">
@@ -88,6 +90,7 @@
                                 </div>
                             </div>
 
+                            {{-- Videos --}}
                             <div class="col-xl-3 col-sm-6 mb-xl-0 mb-4">
                                 <div class="card">
                                     <div class="card-body p-3">
@@ -96,7 +99,7 @@
                                                 <div class="numbers">
                                                     <p class="text-sm mb-0 text-uppercase font-weight-bold">Videos</p>
                                                     <h5 class="font-weight-bolder">
-                                                        {{ number_format($videoCount = $byMimeType->where('type', 'video')->first()->count ?? 0) }}
+                                                        {{ number_format($videoCount) }}
                                                     </h5>
                                                     <p class="mb-0 text-sm">
                                                         <span class="text-warning text-sm font-weight-bolder">
@@ -121,6 +124,7 @@
                                 </div>
                             </div>
 
+                            {{-- Documents --}}
                             <div class="col-xl-3 col-sm-6">
                                 <div class="card">
                                     <div class="card-body p-3">
@@ -129,17 +133,22 @@
                                                 <div class="numbers">
                                                     <p class="text-sm mb-0 text-uppercase font-weight-bold">Documents</p>
                                                     <h5 class="font-weight-bolder">
-                                                        {{ number_format($docCount = $byMimeType->where('type', 'application')->first()->count ?? 0) }}
+                                                        {{ number_format($totalDocuments) }}
                                                     </h5>
                                                     <p class="mb-0 text-sm">
                                                         <span class="text-info text-sm font-weight-bolder">
                                                             @if ($totalFiles > 0)
-                                                                {{ number_format(($docCount / $totalFiles) * 100, 1) }}%
+                                                                {{ number_format(($totalDocuments / $totalFiles) * 100, 1) }}%
                                                             @else
                                                                 0%
                                                             @endif
                                                         </span>
                                                         of total files
+                                                        <small class="d-block text-muted mt-1">
+                                                            PDF: {{ $pdfCount }} |
+                                                            Word: {{ $wordCount }} |
+                                                            Excel: {{ $excelCount }} |
+                                                        </small>
                                                     </p>
                                                 </div>
                                             </div>
@@ -456,6 +465,7 @@
                                 <div class="card">
                                     <div class="card-header pb-0">
                                         <h6>Storage Overview</h6>
+                                        <p class="text-sm text-muted mb-0">Detailed breakdown by file type</p>
                                     </div>
                                     <div class="card-body">
                                         <div class="row align-items-center">
@@ -468,21 +478,14 @@
                                                     {{ \App\Helpers\MediaHelper::formatBytes($totalSize) }}
                                                 </h3>
                                                 <p class="text-muted mb-0">Total Storage Used</p>
+                                                <p class="text-sm text-muted mt-2">
+                                                    <i class="fas fa-file me-1"></i> {{ number_format($totalFiles) }}
+                                                    total files
+                                                </p>
                                             </div>
                                             <div class="col-lg-8">
                                                 <div class="row">
-                                                    @php
-                                                        $imageCount =
-                                                            $byMimeType->where('type', 'image')->first()->count ?? 0;
-                                                        $videoCount =
-                                                            $byMimeType->where('type', 'video')->first()->count ?? 0;
-                                                        $docCount =
-                                                            $byMimeType->where('type', 'application')->first()->count ??
-                                                            0;
-                                                        $otherCount =
-                                                            $totalFiles - ($imageCount + $videoCount + $docCount);
-                                                    @endphp
-
+                                                    {{-- Images --}}
                                                     <div class="col-3 text-center">
                                                         <div
                                                             class="icon icon-shape bg-gradient-primary shadow text-center border-radius-lg mb-2">
@@ -490,7 +493,15 @@
                                                         </div>
                                                         <h5 class="mb-1">{{ number_format($imageCount) }}</h5>
                                                         <small class="text-muted">Images</small>
+                                                        <div class="progress mt-2" style="height: 4px;">
+                                                            <div class="progress-bar bg-gradient-primary"
+                                                                role="progressbar"
+                                                                style="width: {{ $totalFiles > 0 ? ($imageCount / $totalFiles) * 100 : 0 }}%">
+                                                            </div>
+                                                        </div>
                                                     </div>
+
+                                                    {{-- Videos --}}
                                                     <div class="col-3 text-center">
                                                         <div
                                                             class="icon icon-shape bg-gradient-success shadow text-center border-radius-lg mb-2">
@@ -498,15 +509,31 @@
                                                         </div>
                                                         <h5 class="mb-1">{{ number_format($videoCount) }}</h5>
                                                         <small class="text-muted">Videos</small>
+                                                        <div class="progress mt-2" style="height: 4px;">
+                                                            <div class="progress-bar bg-gradient-success"
+                                                                role="progressbar"
+                                                                style="width: {{ $totalFiles > 0 ? ($videoCount / $totalFiles) * 100 : 0 }}%">
+                                                            </div>
+                                                        </div>
                                                     </div>
+
+                                                    {{-- Documents --}}
                                                     <div class="col-3 text-center">
                                                         <div
                                                             class="icon icon-shape bg-gradient-warning shadow text-center border-radius-lg mb-2">
                                                             <i class="fas fa-file-alt text-white"></i>
                                                         </div>
-                                                        <h5 class="mb-1">{{ number_format($docCount) }}</h5>
+                                                        <h5 class="mb-1">{{ number_format($totalDocuments) }}</h5>
                                                         <small class="text-muted">Documents</small>
+                                                        <div class="progress mt-2" style="height: 4px;">
+                                                            <div class="progress-bar bg-gradient-warning"
+                                                                role="progressbar"
+                                                                style="width: {{ $totalFiles > 0 ? ($totalDocuments / $totalFiles) * 100 : 0 }}%">
+                                                            </div>
+                                                        </div>
                                                     </div>
+
+                                                    {{-- Others --}}
                                                     <div class="col-3 text-center">
                                                         <div
                                                             class="icon icon-shape bg-gradient-info shadow text-center border-radius-lg mb-2">
@@ -514,8 +541,52 @@
                                                         </div>
                                                         <h5 class="mb-1">{{ number_format($otherCount) }}</h5>
                                                         <small class="text-muted">Others</small>
+                                                        <div class="progress mt-2" style="height: 4px;">
+                                                            <div class="progress-bar bg-gradient-info" role="progressbar"
+                                                                style="width: {{ $totalFiles > 0 ? ($otherCount / $totalFiles) * 100 : 0 }}%">
+                                                            </div>
+                                                        </div>
                                                     </div>
                                                 </div>
+
+                                                {{-- Document Breakdown --}}
+                                                @if ($totalDocuments > 0)
+                                                    <div class="row mt-4">
+                                                        <div class="col-12">
+                                                            <h6 class="mb-3">Document Breakdown:</h6>
+                                                            <div class="d-flex flex-wrap gap-3">
+                                                                <div class="text-center">
+                                                                    <span
+                                                                        class="badge bg-gradient-danger rounded-pill px-3 py-1">
+                                                                        <i class="fas fa-file-pdf me-1"></i> PDF:
+                                                                        {{ $pdfCount }}
+                                                                    </span>
+                                                                </div>
+                                                                <div class="text-center">
+                                                                    <span
+                                                                        class="badge bg-gradient-primary rounded-pill px-3 py-1">
+                                                                        <i class="fas fa-file-word me-1"></i> Word:
+                                                                        {{ $wordCount }}
+                                                                    </span>
+                                                                </div>
+                                                                <div class="text-center">
+                                                                    <span
+                                                                        class="badge bg-gradient-success rounded-pill px-3 py-1">
+                                                                        <i class="fas fa-file-excel me-1"></i> Excel:
+                                                                        {{ $excelCount }}
+                                                                    </span>
+                                                                </div>
+                                                                {{-- <div class="text-center">
+                                                                    <span
+                                                                        class="badge bg-gradient-warning rounded-pill px-3 py-1">
+                                                                        <i class="fas fa-file-powerpoint me-1"></i> PPT:
+                                                                        {{ $powerpointCount }}
+                                                                    </span>
+                                                                </div> --}}
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                @endif
                                             </div>
                                         </div>
                                     </div>
@@ -536,40 +607,76 @@
             // File Type Distribution Chart
             const typeCtx = document.getElementById('typeChart').getContext('2d');
 
-            // Prepare data for chart
-            const labels = [];
-            const data = [];
-            const backgroundColors = [];
+            // Prepare data for chart with better categorization
+            const chartData = {
+                labels: [],
+                datasets: [{
+                    data: [],
+                    backgroundColor: [],
+                    borderWidth: 2,
+                    borderColor: '#fff',
+                    hoverOffset: 15
+                }]
+            };
 
-            // Color mapping based on type
+            // Color mapping for different file types
             const colorMap = {
                 'image': '#4e73df', // Primary
                 'video': '#1cc88a', // Success
-                'application': '#36b9cc', // Info
-                'audio': '#f6c23e', // Warning
-                'text': '#e74a3b', // Danger
+                'audio': '#36b9cc', // Info
+                'pdf': '#e74a3b', // Danger
+                'word': '#4e73df', // Primary
+                'excel': '#1cc88a', // Success
+                'powerpoint': '#f6c23e', // Warning
                 'other': '#858796' // Secondary
             };
 
+            // Label mapping for display
+            const labelMap = {
+                'image': 'Images',
+                'video': 'Videos',
+                'audio': 'Audio',
+                'pdf': 'PDF Files',
+                'word': 'Word Documents',
+                'excel': 'Excel Files',
+                'powerpoint': 'PowerPoint',
+                'other': 'Other Files'
+            };
+
+            // Add data from $byMimeType
             @foreach ($byMimeType as $type)
-                labels.push('{{ ucfirst($type->type) }}');
-                data.push({{ $type->count }});
-                backgroundColors.push(colorMap['{{ strtolower($type->type) }}'] || '#858796');
+                chartData.labels.push(labelMap['{{ $type->type }}'] || '{{ ucfirst($type->type) }}');
+                chartData.datasets[0].data.push({{ $type->count }});
+                chartData.datasets[0].backgroundColor.push(colorMap['{{ $type->type }}'] || '#858796');
             @endforeach
+
+            // If no data in $byMimeType, use individual counts
+            if (chartData.labels.length === 0) {
+                const counts = {
+                    'Images': {{ $imageCount }},
+                    'Videos': {{ $videoCount }},
+                    'PDF Files': {{ $pdfCount }},
+                    'Word Documents': {{ $wordCount }},
+                    'Excel Files': {{ $excelCount }},
+                    'PowerPoint': {{ $powerpointCount }},
+                    'Other Files': {{ $otherCount }}
+                };
+
+                const colors = ['#4e73df', '#1cc88a', '#e74a3b', '#4e73df', '#1cc88a', '#f6c23e', '#858796'];
+
+                Object.entries(counts).forEach(([label, count], index) => {
+                    if (count > 0) {
+                        chartData.labels.push(label);
+                        chartData.datasets[0].data.push(count);
+                        chartData.datasets[0].backgroundColor.push(colors[index % colors.length]);
+                    }
+                });
+            }
 
             // Create chart
             new Chart(typeCtx, {
                 type: 'doughnut',
-                data: {
-                    labels: labels,
-                    datasets: [{
-                        data: data,
-                        backgroundColor: backgroundColors,
-                        borderWidth: 2,
-                        borderColor: '#fff',
-                        hoverOffset: 15
-                    }]
-                },
+                data: chartData,
                 options: {
                     responsive: true,
                     maintainAspectRatio: false,

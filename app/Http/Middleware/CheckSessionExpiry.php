@@ -6,7 +6,6 @@ use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Symfony\Component\HttpFoundation\Response;
-use Carbon\Carbon;
 
 class CheckSessionExpiry
 {
@@ -39,6 +38,15 @@ class CheckSessionExpiry
                 $session->invalidate();
                 $session->regenerateToken();
 
+                // AJAX request check کریں
+                if ($request->ajax() || $request->wantsJson()) {
+                    return response()->json([
+                        'session_expired' => true,
+                        'redirect_url' => route('login'),
+                        'message' => 'Your session has expired. Please login again.'
+                    ], 401);
+                }
+
                 return redirect()->route('login')
                     ->with('session_expired', 'Your session has expired. Please login again.');
             }
@@ -58,6 +66,15 @@ class CheckSessionExpiry
             }
 
             if ($isProtected) {
+                // AJAX request check کریں
+                if ($request->ajax() || $request->wantsJson()) {
+                    return response()->json([
+                        'session_expired' => true,
+                        'redirect_url' => route('login'),
+                        'message' => 'Please login to continue.'
+                    ], 401);
+                }
+
                 return redirect()->route('login')
                     ->with('error', 'Please login to continue.');
             }

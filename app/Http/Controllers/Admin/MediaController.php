@@ -18,6 +18,7 @@ class MediaController extends Controller
      */
     public function index(Request $request)
     {
+        $title = "Media Library";
         $media = SpatieMedia::query();
 
         // Search functionality
@@ -117,7 +118,8 @@ class MediaController extends Controller
             'totalVideos',
             'totalDocuments',
             'totalOthers',
-            'collections'
+            'collections',
+            'title'
         ));
     }
 
@@ -126,7 +128,8 @@ class MediaController extends Controller
      */
     public function create()
     {
-        return view('admin.media.create');
+        $title = "Upload Media";
+        return view('admin.media.create', compact('title'));
     }
 
     /**
@@ -163,6 +166,7 @@ class MediaController extends Controller
      */
     public function show($id)
     {
+        $title = "Media Details";
         $media = SpatieMedia::findOrFail($id);
 
         // Get related media (same collection)
@@ -171,7 +175,7 @@ class MediaController extends Controller
             ->take(12)
             ->get();
 
-        return view('admin.media.show', compact('media', 'related'));
+        return view('admin.media.show', compact('media', 'related', 'title'));
     }
 
     /**
@@ -179,8 +183,9 @@ class MediaController extends Controller
      */
     public function edit($id)
     {
+        $title = "Edit Media";
         $media = SpatieMedia::findOrFail($id);
-        return view('admin.media.edit', compact('media'));
+        return view('admin.media.edit', compact('media', 'title'));
     }
 
     /**
@@ -233,13 +238,46 @@ class MediaController extends Controller
     /**
      * Delete media file.
      */
+    // public function destroy($id)
+    // {
+    //     $media = SpatieMedia::findOrFail($id);
+    //     $media->delete();
+
+    //     toast_deleted('Media deleted successfully');
+    //     return redirect()->route('admin.media.index');
+    // }
+    /**
+     * Delete media file.
+     */
     public function destroy($id)
     {
-        $media = SpatieMedia::findOrFail($id);
-        $media->delete();
+        try {
+            $media = SpatieMedia::findOrFail($id);
+            $fileName = $media->name ?: $media->file_name;
+            $media->delete();
 
-        toast_deleted('Media deleted successfully');
-        return redirect()->route('admin.media.index');
+            // For AJAX requests, return JSON response
+            if (request()->ajax()) {
+                return response()->json([
+                    'success' => true,
+                    'message' => 'File deleted successfully',
+                    'file_name' => $fileName
+                ]);
+            }
+
+            // For regular requests
+            toast_deleted("File deleted successfully");
+            return redirect()->route('admin.media.index');
+        } catch (\Exception $e) {
+            if (request()->ajax()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Error deleting file: ' . $e->getMessage()
+                ], 500);
+            }
+            toast_error('Error deleting file: ' . $e->getMessage());
+            return redirect()->route('admin.media.index');
+        }
     }
 
     /**
@@ -272,16 +310,64 @@ class MediaController extends Controller
     /**
      * Get media statistics.
      */
+    /**
+     * Get media statistics.
+     */
     public function statistics()
     {
+        $title = "Media Statistics";
         $totalFiles = SpatieMedia::count();
         $totalSize = SpatieMedia::sum('size');
 
-        // Group by mime type
-        $byMimeType = SpatieMedia::selectRaw('SUBSTRING_INDEX(mime_type, "/", 1) as type, COUNT(*) as count')
+        // Improved Group by mime type with better categorization
+        $byMimeType = SpatieMedia::selectRaw('
+        CASE 
+            WHEN mime_type LIKE "image/%" THEN "image"
+            WHEN mime_type LIKE "video/%" THEN "video"
+            WHEN mime_type LIKE "audio/%" THEN "audio"
+            WHEN mime_type = "application/pdf" THEN "pdf"
+            WHEN mime_type IN (
+                "application/msword", 
+                "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+            ) THEN "word"
+            WHEN mime_type IN (
+                "application/vnd.ms-excel",
+                "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+            ) THEN "excel"
+            WHEN mime_type IN (
+                "application/vnd.ms-powerpoint",
+                "application/vnd.openxmlformats-officedocument.presentationml.presentation"
+            ) THEN "powerpoint"
+            ELSE "other"
+        END as type, 
+        COUNT(*) as count
+    ')
             ->groupBy('type')
             ->orderByDesc('count')
             ->get();
+
+        // Get detailed counts for statistics cards
+        $imageCount = SpatieMedia::where('mime_type', 'LIKE', 'image/%')->count();
+        $videoCount = SpatieMedia::where('mime_type', 'LIKE', 'video/%')->count();
+        $pdfCount = SpatieMedia::where('mime_type', 'application/pdf')->count();
+        $wordCount = SpatieMedia::whereIn('mime_type', [
+            'application/msword',
+            'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+        ])->count();
+        $excelCount = SpatieMedia::whereIn('mime_type', [
+            'application/vnd.ms-excel',
+            'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+        ])->count();
+        $powerpointCount = SpatieMedia::whereIn('mime_type', [
+            'application/vnd.ms-powerpoint',
+            'application/vnd.openxmlformats-officedocument.presentationml.presentation'
+        ])->count();
+
+        // Total documents (all office docs + PDFs)
+        $totalDocuments = $pdfCount + $wordCount + $excelCount + $powerpointCount;
+
+        // Others (everything else)
+        $otherCount = $totalFiles - ($imageCount + $videoCount + $totalDocuments);
 
         // Group by collection
         $byCollection = SpatieMedia::selectRaw('collection_name, COUNT(*) as count')
@@ -305,7 +391,16 @@ class MediaController extends Controller
             'byMimeType',
             'byCollection',
             'recentUploads',
-            'largestFiles'
+            'largestFiles',
+            'title',
+            'imageCount',
+            'videoCount',
+            'totalDocuments',
+            'otherCount',
+            'pdfCount',
+            'wordCount',
+            'excelCount',
+            'powerpointCount'
         ));
     }
 }

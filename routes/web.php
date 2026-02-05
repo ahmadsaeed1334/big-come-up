@@ -84,20 +84,15 @@ Route::middleware('guest')->group(function () {
     Route::get('/register', [RegisterController::class, 'showRegistrationForm'])->name('register');
     Route::post('/register', [RegisterController::class, 'register']);
 });
-Route::get('/test-session', function (Request $request) {
-    // Set session data
-    $request->session()->put('test_key', 'test_value');
-    $request->session()->put('test_time', now()->toDateTimeString());
-
-    // Get session data
-    return response()->json([
-        'session_id' => session()->getId(),
-        'test_key' => session()->get('test_key'),
-        'test_time' => session()->get('test_time'),
-        'session_driver' => config('session.driver'),
-        'session_lifetime' => config('session.lifetime'),
-    ]);
-});
+// Session check route
+Route::get('/check-session', function (Request $request) {
+    if (Auth::check()) {
+        // Update last activity
+        $request->session()->put('last_activity', time());
+        return response()->json(['active' => true]);
+    }
+    return response()->json(['active' => false], 401);
+})->name('check.session');
 Route::middleware(['auth'])
     ->prefix('admin')
     ->name('admin.')

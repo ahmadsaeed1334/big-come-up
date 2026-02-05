@@ -371,16 +371,15 @@
                                                                 <hr class="dropdown-divider">
                                                             </li>
                                                             <li>
-                                                                <form action="{{ route('admin.media.destroy', $item) }}"
-                                                                    method="POST"
-                                                                    onsubmit="return confirm('Are you sure you want to delete this file?')">
-                                                                    @csrf
-                                                                    @method('DELETE')
-                                                                    <button type="submit"
-                                                                        class="dropdown-item text-danger">
-                                                                        <i class="fas fa-trash me-2"></i> Delete
-                                                                    </button>
-                                                                </form>
+                                                                <a href="javascript:void(0);"
+                                                                    class="dropdown-item text-danger"
+                                                                    onclick="confirmMediaDelete({{ json_encode([
+                                                                        'id' => $item->id,
+                                                                        'name' => $item->name ?: $item->file_name,
+                                                                        'url' => route('admin.media.destroy', $item),
+                                                                    ]) }})">
+                                                                    <i class="fas fa-trash me-2"></i> Delete
+                                                                </a>
                                                             </li>
                                                         </ul>
                                                     </div>
@@ -538,9 +537,7 @@
             </div>
         </div>
     </div>
-@endsection
 
-@push('scripts')
     <script>
         // Copy to Clipboard
         function copyToClipboard(text) {
@@ -575,20 +572,66 @@
             });
         }
 
-        // Delete confirmation
-        function confirmDelete(formId) {
+        function confirmMediaDelete(mediaData) {
+            const mediaId = mediaData.id;
+            const fileName = mediaData.name;
+            const deleteUrl = mediaData.url;
+
             Swal.fire({
-                title: 'Are you sure?',
-                text: "This file will be permanently deleted!",
+                title: 'Delete File?',
+                html: `<div class="text-start">
+            <p class="mb-2">Are you sure you want to delete <strong>"${fileName}"</strong>?</p>
+            <div class="alert alert-danger py-2 mb-3">
+                <i class="fas fa-exclamation-triangle me-2"></i>
+                This action cannot be undone! All file data will be permanently removed.
+            </div>
+        </div>`,
                 icon: 'warning',
                 showCancelButton: true,
                 confirmButtonColor: '#d33',
-                cancelButtonColor: '#8392ab',
-                confirmButtonText: 'Yes, delete it',
-                cancelButtonText: 'Cancel'
+                cancelButtonColor: '#6c757d',
+                confirmButtonText: 'Yes, delete it!',
+                cancelButtonText: 'Cancel',
+                width: '450px'
             }).then((result) => {
                 if (result.isConfirmed) {
-                    document.getElementById(formId).submit();
+                    // Create and submit form dynamically
+                    const form = document.createElement('form');
+                    form.method = 'POST';
+                    form.action = deleteUrl;
+                    form.style.display = 'none';
+
+                    const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+
+                    const csrfInput = document.createElement('input');
+                    csrfInput.type = 'hidden';
+                    csrfInput.name = '_token';
+                    csrfInput.value = csrfToken;
+
+                    const methodInput = document.createElement('input');
+                    methodInput.type = 'hidden';
+                    methodInput.name = '_method';
+                    methodInput.value = 'DELETE';
+
+                    form.appendChild(csrfInput);
+                    form.appendChild(methodInput);
+                    document.body.appendChild(form);
+
+                    // Show loading
+                    Swal.fire({
+                        title: 'Deleting...',
+                        text: 'Please wait while we delete the file',
+                        allowOutsideClick: false,
+                        showConfirmButton: false,
+                        willOpen: () => {
+                            Swal.showLoading();
+                        }
+                    });
+
+                    // Submit form
+                    setTimeout(() => {
+                        form.submit();
+                    }, 500);
                 }
             });
         }
@@ -615,4 +658,4 @@
             });
         });
     </script>
-@endpush
+@endsection

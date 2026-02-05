@@ -284,6 +284,85 @@
       </style>
   @endif
 
-  <script></script>
+  <script>
+      // Global AJAX setup for session handling
+      $(document).ready(function() {
+          // Intercept all AJAX requests
+          $.ajaxSetup({
+              statusCode: {
+                  401: function(response) {
+                      if (response.responseJSON && response.responseJSON.session_expired) {
+                          // Show modal with redirect option
+                          showSessionExpiredModal(response.responseJSON.redirect_url);
+                      }
+                  },
+                  419: function() {
+                      // CSRF token mismatch - session expired
+                      showSessionExpiredModal(loginUrl);
+                  }
+              }
+          });
+
+          // Session expired modal
+          function showSessionExpiredModal(redirectUrl) {
+              // Remove any existing modal
+              $('#sessionExpiredModal').remove();
+
+              // Create modal HTML
+              var modalHtml = `
+            <div class="modal fade" id="sessionExpiredModal" tabindex="-1" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Session Expired</h5>
+                        </div>
+                        <div class="modal-body">
+                            <p>Your session has expired. Please login again.</p>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-primary" id="redirectToLogin">OK</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `;
+
+              // Add modal to body
+              $('body').append(modalHtml);
+
+              // Show modal
+              var modal = new bootstrap.Modal(document.getElementById('sessionExpiredModal'));
+              modal.show();
+
+              // Redirect on OK click
+              $('#redirectToLogin').click(function() {
+                  window.location.href = redirectUrl || '/login';
+              });
+
+              // Auto redirect after 5 seconds
+              setTimeout(function() {
+                  if ($('#sessionExpiredModal').is(':visible')) {
+                      window.location.href = redirectUrl || '/login';
+                  }
+              }, 5000);
+          }
+
+          // Auto-check session every minute
+          setInterval(function() {
+              $.ajax({
+                  url: '/check-session',
+                  method: 'GET',
+                  headers: {
+                      'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                  }
+              }).fail(function(xhr) {
+                  if (xhr.status === 401 || xhr.status === 419) {
+                      // Session expired
+                      showSessionExpiredModal('/login');
+                  }
+              });
+          }, 60000); // Check every minute
+      });
+  </script>
   @stack('scripts')
   @include('admin.partials.ckeditor')
