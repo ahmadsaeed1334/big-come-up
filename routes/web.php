@@ -30,6 +30,7 @@ use App\Http\Controllers\Admin\{
     ArtistsCategoryController,
     ArtistsProductController,
     ColorController,
+    CompetitionCategoryController,
     Dashboard,
     MediaController,
     ProductReviewController,
@@ -115,7 +116,20 @@ Route::middleware(['auth'])
     ->prefix('admin')
     ->name('admin.')
     ->group(function () {
+        // Competition Categories
+        Route::resource('competition-categories', CompetitionCategoryController::class);
+        Route::post(
+            'competition-categories/{competitionCategory}/toggle',
+            [CompetitionCategoryController::class, 'toggle']
+        )
+            ->name('competition-categories.toggle');
+
         Route::resource('competitions', CompetitionController::class);
+        Route::post(
+            'competitions/{competition}/toggle',
+            [CompetitionController::class, 'toggle']
+        )
+            ->name('competitions.toggle');
     });
 
 Route::middleware(['auth'])
