@@ -55,6 +55,7 @@ return new class extends Migration
             $table->text('prize_description')->nullable();
 
             $table->boolean('is_published')->default(false);
+            $table->softDeletes();
             $table->timestamps();
         });
     }

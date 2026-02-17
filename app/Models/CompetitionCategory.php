@@ -23,6 +23,6 @@ class CompetitionCategory extends Model
 
     public function competitions()
     {
-        return $this->hasMany(Competition::class);
+        return $this->hasMany(Competition::class, 'category_id', 'id');
     }
 }

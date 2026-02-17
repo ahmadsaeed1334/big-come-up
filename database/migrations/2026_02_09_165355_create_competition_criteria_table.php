@@ -15,7 +15,10 @@ return new class extends Migration
                 ->cascadeOnDelete();
             $table->string('name');
             $table->unsignedTinyInteger('weight')->default(100);
+            $table->unsignedTinyInteger('max_score')->default(10);
+
             $table->text('description')->nullable();
+            $table->softDeletes();
             $table->timestamps();
         });
     }

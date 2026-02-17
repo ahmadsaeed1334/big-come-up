@@ -47,11 +47,12 @@ class Competition extends Model
 
     public function category()
     {
-        return $this->belongsTo(CompetitionCategory::class);
+        return $this->belongsTo(CompetitionCategory::class, 'category_id', 'id');
     }
 
     public function criteria()
     {
-        return $this->hasMany(CompetitionCriteria::class);
+        // ✅ Explicitly define the foreign key and table
+        return $this->hasMany(CompetitionCriteria::class, 'competition_id', 'id');
     }
 }

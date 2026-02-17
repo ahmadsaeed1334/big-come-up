@@ -4,14 +4,7 @@
 @section('title', 'Create New Judge')
 
 @section('content')
-    <!-- Breadcrumb -->
-    {{-- <nav aria-label="breadcrumb" class="mb-4">
-            <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Dashboard</a></li>
-                <li class="breadcrumb-item"><a href="{{ route('admin.judges.index') }}">Judges</a></li>
-                <li class="breadcrumb-item active">Create</li>
-            </ol>
-        </nav> --}}
+
 
     <form action="{{ route('admin.judges.store') }}" method="POST" enctype="multipart/form-data" id="createJudgeForm">
         @csrf

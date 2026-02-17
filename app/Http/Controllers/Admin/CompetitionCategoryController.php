@@ -14,16 +14,20 @@ class CompetitionCategoryController extends Controller
     {
         $title = "Competition Categories";
 
-        $query = CompetitionCategory::query()->latest();
+        $query = CompetitionCategory::query()
+            ->withCount('competitions')
+            ->latest();
 
-        if ($request->filled('q')) {
-            $q = $request->q;
-            $query->where(function ($sub) use ($q) {
-                $sub->where('name', 'like', "%{$q}%")
-                    ->orWhere('slug', 'like', "%{$q}%");
+        // Search filter
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where(function ($q) use ($search) {
+                $q->where('name', 'like', "%{$search}%")
+                    ->orWhere('slug', 'like', "%{$search}%");
             });
         }
 
+        // Status filter
         if ($request->filled('status')) {
             if ($request->status === 'active') {
                 $query->where('is_active', true);
@@ -34,13 +38,18 @@ class CompetitionCategoryController extends Controller
 
         $categories = $query->paginate(10)->withQueryString();
 
-        return view('admin.competition-categories.index', compact('categories', 'title'));
-    }
+        // Stats for cards
+        $totalCategories = CompetitionCategory::count();
+        $activeCategories = CompetitionCategory::where('is_active', true)->count();
+        $totalCompetitions = \App\Models\Competition::count();
 
-    public function create()
-    {
-        $title = "Create Competition Category";
-        return view('admin.competition-categories.create', compact('title'));
+        return view('admin.competition-categories.index', compact(
+            'categories',
+            'title',
+            'totalCategories',
+            'activeCategories',
+            'totalCompetitions'
+        ));
     }
 
     public function store(Request $request)
@@ -58,20 +67,7 @@ class CompetitionCategoryController extends Controller
 
         toast_created('Competition Category');
 
-        return redirect()->route('admin.competition-categories.index');
-    }
-
-    public function show(CompetitionCategory $competitionCategory)
-    {
-        return redirect()->route('admin.competition-categories.edit', $competitionCategory);
-    }
-
-    public function edit(CompetitionCategory $competitionCategory)
-    {
-        $title = "Edit Competition Category";
-        $category = $competitionCategory;
-
-        return view('admin.competition-categories.edit', compact('category', 'title'));
+        return redirect()->back();
     }
 
     public function update(Request $request, CompetitionCategory $competitionCategory)
@@ -94,11 +90,17 @@ class CompetitionCategoryController extends Controller
 
         toast_updated('Competition Category');
 
-        return redirect()->route('admin.competition-categories.index');
+        return redirect()->back();
     }
 
     public function destroy(CompetitionCategory $competitionCategory)
     {
+        // Check if category has competitions
+        if ($competitionCategory->competitions()->count() > 0) {
+            toast_error('Cannot delete category with existing competitions.');
+            return redirect()->back();
+        }
+
         try {
             $competitionCategory->delete();
             toast_deleted('Competition Category');
@@ -106,7 +108,7 @@ class CompetitionCategoryController extends Controller
             toast_error('Category cannot be deleted right now.');
         }
 
-        return back();
+        return redirect()->back();
     }
 
     public function toggle(CompetitionCategory $competitionCategory)
@@ -117,6 +119,6 @@ class CompetitionCategoryController extends Controller
             toast_updated('Category Activated') :
             toast_updated('Category Deactivated');
 
-        return back();
+        return redirect()->back();
     }
 }
